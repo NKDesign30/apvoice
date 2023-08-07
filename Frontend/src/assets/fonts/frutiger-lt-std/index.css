@@ -1,0 +1,13 @@
+@font-face {
+  font-family: 'Frutiger LT Std';
+  font-display: swap;
+  src: url('./files/382653_0_0.woff2') format('woff2'), url('./files/382653_0_0.woff') format('woff'), url('./files/382653_0_0.ttf') format('truetype');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Frutiger LT Std';
+  font-display: swap;
+  src: url('./files/382653_1_0.woff2') format('woff2'), url('./files/382653_1_0.woff') format('woff'), url('./files/382653_1_0.ttf') format('truetype');
+  font-weight: 700;
+}
