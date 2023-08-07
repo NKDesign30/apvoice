@@ -1,0 +1,56 @@
+# Docker
+
+# Build a Docker image 
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+  - master
+  - develop
+
+resources:
+- repo: self
+
+jobs:
+- job: productionDeployment
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  variables:
+    tag: '$(Build.BuildId)'
+  pool:
+    name: Azure Pipelines
+    vmImage: 'ubuntu-18.04'
+  steps:
+  - task: Docker@2
+    inputs:
+      containerRegistry: $(containerRegistryProd)
+      command: 'login'
+      arguments: -u $(acrUserProd) -p $(acrTokenProd)
+
+  - task: Docker@2
+    displayName: 'Build an image'
+    inputs:
+      containerRegistry: $(containerRegistryProd)
+      repository: 'apovoice-backend'
+      command: 'buildAndPush'
+      Dockerfile: $(Build.SourcesDirectory)/Dockerfile
+
+- job: developDeployment
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+  variables:
+    tag: '$(Build.BuildId)'
+  pool:
+    name: Azure Pipelines
+    vmImage: 'ubuntu-latest'
+  steps:
+  - task: Docker@2
+    inputs:
+      containerRegistry: $(containerRegistryNP)
+      command: 'login'
+      arguments: -u $(acrUserNP) -p $(acrTokenNP)
+
+  - task: Docker@2
+    displayName: 'Build an image'
+    inputs:
+      containerRegistry: $(containerRegistryNP)
+      repository: 'apovoice-backend'
+      command: 'buildAndPush'
+      Dockerfile: $(Build.SourcesDirectory)/Dockerfile

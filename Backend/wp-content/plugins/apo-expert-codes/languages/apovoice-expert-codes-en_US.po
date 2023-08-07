@@ -1,0 +1,78 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ApoExpertCodes\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-10-09 12:01+0000\n"
+"PO-Revision-Date: 2019-10-09 12:02+0000\n"
+"Last-Translator: Mark <m.sitko@awsm.rocks>\n"
+"Language-Team: English (United States)\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.3.0; wp-5.1.1"
+
+#. Name of the plugin
+msgid "ApoExpertCodes"
+msgstr "ApoExpertCodes"
+
+#. Author of the plugin
+msgid "AWESOME! Software GmbH"
+msgstr "AWESOME! Software GmbH"
+
+#: src/views/admin.php:132
+msgid "Created At"
+msgstr "Created At"
+
+#: src/views/admin.php:97
+msgid "Expert Code"
+msgstr "Expert Code"
+
+#: src/plugin-functions/expertcodes-functions.php:12
+#: src/plugin-functions/expertcodes-functions.php:13
+msgid "Expert Codes"
+msgstr "Expert Codes"
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://www.awsm.rocks"
+msgstr "https://www.awsm.rocks"
+
+#: src/controllers/ExpertCodesController.php:50
+msgid "Invalid nonce. Try re-submitting the form."
+msgstr "Invalid nonce. Try re-submitting the form."
+
+#: src/views/admin.php:48
+msgid "Manage Apovoice Expert Codes"
+msgstr "Manage Apovoice Expert Codes"
+
+#. Description of the plugin
+msgid "Manage Expert Codes for Apovoice."
+msgstr "Manage Expert Codes for Apovoice."
+
+#: src/controllers/ExpertCodesController.php:62
+#: src/controllers/ExpertCodesController.php:97
+msgid "No new expert codes have been imported. Everything is up to date."
+msgstr ""
+
+#: src/views/admin.php:104
+msgid "Sales Rep Email"
+msgstr ""
+
+#: src/views/admin.php:111
+msgid "Sales Rep Name"
+msgstr ""
+
+#: src/views/admin.php:139
+msgid "Updated At"
+msgstr ""
+
+#: src/views/admin.php:118
+msgid "Usages"
+msgstr ""
+
+#: src/views/admin.php:125
+msgid "Used"
+msgstr ""

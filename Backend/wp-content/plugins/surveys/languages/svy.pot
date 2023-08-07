@@ -1,0 +1,58 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Surveys\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-10-09 12:16+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.3.0; wp-5.1.1"
+
+#: src/cpt/Survey.php:25 src/cpt/Survey.php:26
+msgid "Add new Survey"
+msgstr ""
+
+#. Author of the plugin
+msgid "AWESOME! Software GmbH"
+msgstr ""
+
+#. Description of the plugin
+msgid "Create customer surveys for Apovoice International"
+msgstr ""
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://www.awsm.rocks"
+msgstr ""
+
+#: src/cpt/Survey.php:24
+msgid "Show Surveys"
+msgstr ""
+
+#: src/cpt/Survey.php:31
+msgid "Start Survey"
+msgstr ""
+
+#: src/cpt/Survey.php:23
+msgid "Survey"
+msgstr ""
+
+#. Name of the plugin
+#: src/cpt/Survey.php:22 src/cpt/Survey.php:30
+msgid "Surveys"
+msgstr ""
+
+#: src/plugin-functions/svy-functions.php:18
+msgid "The survey must be first activated by a given training."
+msgstr ""
+
+#: src/controllers/ResultsController.php:68
+msgid "This field is required"
+msgstr ""

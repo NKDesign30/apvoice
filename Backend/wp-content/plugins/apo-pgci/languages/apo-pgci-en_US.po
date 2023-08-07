@@ -1,0 +1,96 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ApoPgci\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-10-17 11:47+0000\n"
+"PO-Revision-Date: 2019-10-17 11:48+0000\n"
+"Last-Translator: Mark <m.sitko@awsm.rocks>\n"
+"Language-Team: English (United States)\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.3.0; wp-5.1.1"
+
+#. Name of the plugin
+msgid "ApoPgci"
+msgstr "ApoPgci"
+
+#. Author of the plugin
+msgid "AWESOME! Software GmbH"
+msgstr "AWESOME! Software GmbH"
+
+#: src/views/pgci-codes.php:65
+msgid "Created At"
+msgstr "Created At"
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://www.awsm.rocks"
+msgstr "https://www.awsm.rocks"
+
+#: src/views/pgci-codes.php:19
+msgid ""
+"Import an Excel Spreadsheet (.xls, .xlsx) or Comma Separated Value (.csv) "
+"File"
+msgstr ""
+"Import an Excel Spreadsheet (.xls, .xlsx) or Comma Separated Value (.csv) "
+"File"
+
+#: src/views/pgci-codes.php:29
+msgid "Import PGCI Codes"
+msgstr "Import PGCI Codes"
+
+#: src/controllers/PGCIUploadController.php:34
+msgid "Invalid nonce. Try re-submitting the form."
+msgstr "Invalid nonce. Try re-submitting the form."
+
+#. Description of the plugin
+msgid "Manage Pharmacie unique numbers for Apovoice."
+msgstr "Manage Pharmacie unique numbers for Apovoice."
+
+#: src/views/pgci-codes.php:2
+msgid "Manage PGCI Codes"
+msgstr "Manage PGCI Codes"
+
+#: src/views/pgci-codes.php:58
+msgid "Name"
+msgstr "Name"
+
+msgid "Country"
+msgstr "Country"
+
+msgid "Street"
+msgstr "Street"
+
+msgid "Street No"
+msgstr "Street No"
+
+msgid "ZIP Code"
+msgstr "ZIP Code"
+
+msgid "City"
+msgstr "City"
+
+#: src/controllers/PGCIUploadController.php:46
+msgid "No new PGCI's codes have been imported. Everything is up to date."
+msgstr "No new PGCI's codes have been imported. Everything is up to date."
+
+#: src/controllers/PGCIUploadController.php:78
+msgid "No new PGCI's have been imported. Everything is up to date."
+msgstr "No new PGCI's have been imported. Everything is up to date."
+
+#: src/views/pgci-codes.php:51
+msgid "P&G Customer ID"
+msgstr "P&G Customer ID"
+
+#: src/plugin-functions/pgci-functions.php:7
+#: src/plugin-functions/pgci-functions.php:8
+msgid "P&G Customer IDs"
+msgstr "P&G Customer IDs"
+
+#: src/views/pgci-codes.php:38
+msgid "Search PGCI's"
+msgstr "Search PGCI's"
