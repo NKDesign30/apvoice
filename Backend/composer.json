@@ -1,8 +1,0 @@
-{
-    "require": {
-        "phpoffice/phpspreadsheet": "^1.9",
-        "microsoft/azure-storage-blob": "^1.4",
-        "ralouphie/mimey": "^2.1",
-        "fpdf/fpdf": "^1.82"
-    }
-}

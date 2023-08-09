@@ -1,4 +1,0 @@
-PATH=/bin:/usr/bin:/usr/local/bin
-0 03 * * * /bin/bash /usr/local/src/cronjobs/daily_statistics.sh
-0 2 1 * * /bin/bash /usr/local/src/cronjobs/monthly_report.sh
- 
