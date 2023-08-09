@@ -12,9 +12,8 @@
     </div>
   </div>
 </template>
-<script></script>
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import training from "@/components/V2/training/training.vue";
 import premiumTraining from "@/components/V2/training/premiumTraining.vue";
 
@@ -53,9 +52,8 @@ export default {
       return this.currentTrainingSeries;
     }
   },
-
   watch: {},
-
   methods: {}
 };
 </script>
+
