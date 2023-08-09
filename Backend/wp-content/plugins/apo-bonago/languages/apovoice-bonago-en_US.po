@@ -1,0 +1,110 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ApoBonago\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-10-09 12:06+0000\n"
+"PO-Revision-Date: 2019-10-09 12:06+0000\n"
+"Last-Translator: Mark <m.sitko@awsm.rocks>\n"
+"Language-Team: English (United States)\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.3.0; wp-5.1.1"
+
+#: src/views/bonago-vouchers.php:36
+msgid "All"
+msgstr "All"
+
+#. Name of the plugin
+msgid "ApoBonago"
+msgstr "ApoBonago"
+
+#: src/views/bonago-vouchers.php:46 src/views/bonago-vouchers.php:88
+msgid "Assigned"
+msgstr "Assigned"
+
+#: src/views/bonago-vouchers.php:102
+msgid "Assigned At"
+msgstr "Assigned At"
+
+#: src/views/bonago-vouchers.php:41
+msgid "Available"
+msgstr "Available"
+
+#. Author of the plugin
+msgid "AWESOME! Software GmbH"
+msgstr "AWESOME! Software GmbH"
+
+#: src/plugin-functions/apo-bonago-functions.php:8
+#: src/plugin-functions/apo-bonago-functions.php:9
+msgid "Bonago Vouchers"
+msgstr "Bonago Vouchers"
+
+#: src/views/bonago-vouchers.php:116
+msgid "Expires At"
+msgstr "Expires At"
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://www.awsm.rocks"
+msgstr "https://www.awsm.rocks"
+
+#: src/views/bonago-vouchers.php:20
+msgid ""
+"Import an Excel Spreadsheet (.xls, .xlsx) or Comma Separated Value (.csv) "
+"File"
+msgstr ""
+"Import an Excel Spreadsheet (.xls, .xlsx) or Comma Separated Value (.csv) "
+"File"
+
+#: src/views/bonago-vouchers.php:30
+msgid "Import Voucher Codes"
+msgstr "Import Voucher Codes"
+
+#: src/controllers/VoucherUploadController.php:34
+msgid "Invalid nonce. Try re-submitting the form."
+msgstr "Invalid nonce. Try re-submitting the form."
+
+#: src/views/bonago-vouchers.php:2
+msgid "Manage Bonago Vouchers"
+msgstr "Manage Bonago Vouchers"
+
+#. Description of the plugin
+msgid "Manage the bonago system"
+msgstr "Manage the bonago system"
+
+#: src/controllers/AdminViewController.php:103
+msgid "No"
+msgstr "No"
+
+#: src/controllers/VoucherUploadController.php:48
+#: src/controllers/VoucherUploadController.php:79
+msgid "No new voucher codes have been imported. Everything is up to date."
+msgstr "No new voucher codes have been imported. Everything is up to date."
+
+#: src/views/bonago-vouchers.php:51 src/views/bonago-vouchers.php:95
+msgid "Redeemed"
+msgstr "Redeemed"
+
+#: src/views/bonago-vouchers.php:109
+msgid "Redeemed At"
+msgstr "Redeemed At"
+
+#: src/views/bonago-vouchers.php:62
+msgid "Search vouchers"
+msgstr "Search vouchers"
+
+#: src/views/bonago-vouchers.php:81
+msgid "User"
+msgstr "User"
+
+#: src/views/bonago-vouchers.php:74
+msgid "Voucher Code"
+msgstr "Voucher Code"
+
+#: src/controllers/AdminViewController.php:107
+msgid "Yes"
+msgstr "Yes"

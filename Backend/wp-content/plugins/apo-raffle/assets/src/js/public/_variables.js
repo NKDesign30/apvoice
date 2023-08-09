@@ -1,0 +1,1 @@
+var pluginName = 'MS Plugin Boilerplate'

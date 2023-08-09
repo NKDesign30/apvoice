@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: apovoice
+    restart: always
+    volumes:
+      - ../sql-dump:/docker-entrypoint-initdb.d
+      - db-data:/var/lib/mysql
+    networks:
+      - apovoice
+    ports:
+      - '3336:3306'
+
+  server:
+    image: wordpress:5.5.1
+    ports:
+      - '80:80'
+    volumes:
+      - ./:/var/www/html
+      - ./docker/wordpress/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    restart: always
+    links:
+      - mysql
+    networks:
+      - apovoice
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:4.6.4-1
+    ports:
+      - '3010:80'
+    restart: always
+    links:
+      - 'mysql:db'
+    networks:
+      - apovoice
+
+  composer:
+    image: composer:1.9.0
+    volumes:
+      - ./:/app
+
+volumes:
+  db-data:
+
+networks:
+  apovoice:
+    external: true
