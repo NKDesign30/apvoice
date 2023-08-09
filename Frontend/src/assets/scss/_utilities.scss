@@ -1,0 +1,146 @@
+.transition {
+    &-all {
+        transition-property: all;
+    }
+
+    &-ease {
+        transition-timing-function: ease;
+    }
+
+    &-ease-out {
+        transition-timing-function: ease-out;
+    }
+
+    &-ease-in {
+        transition-timing-function: ease-in;
+    }
+
+    &-normal {
+        transition-duration: 0.3s;
+    }
+
+    &-fast {
+        transition-duration: 0.15s;
+    }
+
+    &-faster {
+        transition-duration: 0.1s;
+    }
+
+    &-fastest {
+        transition-duration: 0.075s;
+    }
+
+    &-slowest {
+        transition-duration: 5s;
+    }
+
+    &-color {
+        transition-property: color;
+    }
+
+    &-border-color {
+        transition-property: border-color;
+    }
+
+    &-background-color {
+        transition-property: background-color;
+    }
+
+    &-width {
+        transition-property: width;
+    }
+
+    &-transform {
+        will-change: transform;
+        transition-property: transform;
+    }
+}
+
+.scale {
+    &-75 {
+        transform: scale(0.75);
+    }
+
+    &-100 {
+        transform: scale(1);
+    }
+}
+
+.translate-y {
+    &-0 {
+        transform: translate3d(0, 0, 0);
+    }
+
+    &-2 {
+        transform: translate3d(0, calc(theme('spacing.2') * -1), 0);
+    }
+
+    &-4 {
+        transform: translate3d(0, calc(theme('spacing.4') * -1), 0);
+    }
+}
+
+.rotate {
+    &-90 {
+        transform: rotate(90deg);
+    }
+
+    &-180 {
+        transform: rotate(180deg);
+    }
+
+    &-negative-90 {
+        transform: rotate(-90deg);
+    }
+}
+
+.spacer {
+    &-default {
+        @apply py-3;
+
+        @screen desktop {
+            @apply py-5;
+        }
+
+        &-top {
+            @apply pt-3;
+            @apply pb-0;
+
+            @screen desktop {
+                @apply pt-5;
+            }
+        }
+
+        &-top {
+            @apply pt-0;
+            @apply pb-3;
+        }
+    }
+
+    &-module {
+        @apply py-10;
+
+        @screen desktop {
+            @apply py-20;
+        }
+
+        &-top {
+            @apply pt-10;
+            @apply pb-0;
+
+            @screen desktop {
+                @apply pt-20;
+            }
+        }
+
+        &-bottom {
+            @apply pt-0;
+            @apply pb-10;
+
+            @screen desktop {
+                @apply pb-20;
+            }
+        }
+    }
+}

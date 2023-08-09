@@ -1,0 +1,4 @@
+- AGPL (GNU Affero General Public License)
+    - see licenses/AGPL-3.0.txt
+    - applies to:
+        - ViewerJS (https://github.com/webodf/ViewerJS)

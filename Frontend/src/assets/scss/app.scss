@@ -1,0 +1,125 @@
+@tailwind base;
+
+@tailwind components;
+
+h1,
+.headline-1 {
+  @apply headline-1;
+
+  @screen tablet {
+    @apply headline-1-tablet;
+  }
+
+  @screen desktop {
+    @apply headline-1-desktop;
+  }
+  max-width: 100%;
+  overflow: hidden;
+}
+
+h2,
+.headline-2 {
+  @apply headline-2;
+
+  @screen desktop {
+    @apply headline-2-desktop;
+  }
+  max-width: 100%;
+  overflow: hidden;
+}
+
+h3,
+.headline-3 {
+  @apply headline-3;
+
+  @screen desktop {
+    @apply headline-3-desktop;
+  }
+}
+
+h4,
+.headline-4 {
+  @apply headline-4;
+
+  @screen desktop {
+    @apply headline-4-desktop;
+  }
+}
+
+h5,
+.headline-5 {
+  @apply headline-5;
+
+  @screen desktop {
+    @apply headline-5-desktop;
+  }
+}
+
+h6,
+.headline-6 {
+  @apply headline-6;
+
+  @screen desktop {
+    @apply headline-6-desktop;
+  }
+}
+
+@tailwind utilities;
+
+@import 'utilities';
+
+*:focus{
+  box-shadow: 0 0 0 3px lightblue;
+}
+
+.tooltip {
+
+  &__handler {
+    @apply cursor-pointer;
+    @apply text-blue-600;
+  }
+
+  &--is-active {
+    @apply text-blue-400;
+
+    .tooltip__layer {
+      display: block!important;
+    }
+  }
+
+  &__layer {
+    box-shadow: inset 1px 4px 9px -6px, inset 1px -4px 9px -6px;
+    margin-left: calc(-50vw + 50%);
+    width: 100vw;
+    height: auto;
+    @apply py-12;
+    @apply relative;
+    display: none;
+    @apply text-gray-900;
+  }
+
+}
+
+.email_confirmation {
+  @screen desktop {
+    @apply p-0;
+
+    & > div {
+      @apply flex;
+
+      & > div {
+        @apply flex-1 px-4;
+      }
+    }
+  }
+}
+
+@media (min-width: 640px){
+  .tablet\:grid {
+      display: grid;
+  }
+}
+
+.grid{
+  display: grid;
+}
