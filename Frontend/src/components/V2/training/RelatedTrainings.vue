@@ -1,6 +1,15 @@
 <template>
-  <div class="flex flex-col w-full pb-5 mb-5 border-b-2 text-left">
-    <single-training :training="this.relatedTraining[0]" :theme="theme" :relation="true" />
+  <div v-if="relatedTraining && relatedTraining.length">
+    <h2 class="text-xl font-semibold mb-4">{{ $t('trainings.relatedTrainings') }}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div v-for="training in relatedTraining" :key="training.id" class="bg-white p-4 rounded shadow">
+        <img :src="training.image" alt="Training Bild" class="w-full h-48 object-cover rounded-t">
+        <div class="p-4">
+          <h3 class="text-lg font-semibold">{{ training.title }}</h3>
+          <p class="text-sm text-gray-500">{{ training.description }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script></script>
