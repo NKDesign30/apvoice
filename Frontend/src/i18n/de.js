@@ -143,6 +143,7 @@ export default {
   },
 
   newsletter: {
+    popup: 'Ich habe die Datenschutzbestimmungen gelesen und bin mir dessen bewusst.',
     subscribe: 'Newsletter abonnieren',
     decline: 'Ablehnen',
   },

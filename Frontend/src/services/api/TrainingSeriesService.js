@@ -1,10 +1,10 @@
-import TrainingMapper from '@/services/mapper/TrainingMapper';
+import TrainingMapper from "@/services/mapper/TrainingMapper";
 
 export default class TrainingSeriesService {
   static fetchAll() {
     return new Promise((resolve, reject) => {
       window.axios
-        .get('/wp-json/wp/v2/training-series?per_page=100')
+        .get("/wp-json/wp/v2/training-series?per_page=100")
         .then(({ data }) => {
           console.log(data);
           resolve(data.map(series => TrainingMapper.this(series)));
@@ -16,7 +16,7 @@ export default class TrainingSeriesService {
   static fetchPremium() {
     return new Promise((resolve, reject) => {
       window.axios
-        .get('/wp-json/wc/v2/training-series-premium')
+        .get("/wp-json/wc/v2/training-series-premium")
         .then(({ data }) => {
           resolve(
             data.map(item => ({
@@ -31,8 +31,8 @@ export default class TrainingSeriesService {
               informations: item.acf.informations,
               unlocked: item.unlocked,
               is_complete: item.is_complete,
-              apo_points: item.acf.informations.apo_points,
-            })),
+              apo_points: item.acf.informations.apo_points
+            }))
           );
         })
         .catch(error => reject(error));
@@ -42,12 +42,13 @@ export default class TrainingSeriesService {
   static fetchLatestCategoryTrainings() {
     return new Promise((resolve, reject) => {
       window.axios
-        .get('/wp-json/wc/v2/training-category-series')
+        .get("/wp-json/wc/v2/training-category-series")
         .then(({ data }) => {
           resolve(
             data.map(item => ({
               title: item.title,
               boost: item.acf.informations.boost,
+              expires_at: item.acf.informations.expires_at,
               link: item.link,
               thumbnail: item.acf.informations.image.url,
               category: item.category,
@@ -56,8 +57,8 @@ export default class TrainingSeriesService {
               slug: item.slug,
               trainings: item.trainings,
               informations: item.acf.informations,
-              apo_points: item.acf.informations.apo_points,
-            })),
+              apo_points: item.acf.informations.apo_points
+            }))
           );
         })
         .catch(error => reject(error));
@@ -67,7 +68,7 @@ export default class TrainingSeriesService {
   static fetchLatestProductTrainings() {
     return new Promise((resolve, reject) => {
       window.axios
-        .get('/wp-json/wc/v2/training-product-series')
+        .get("/wp-json/wc/v2/training-product-series")
         .then(({ data }) => {
           resolve(
             data.map(item => ({
@@ -81,8 +82,8 @@ export default class TrainingSeriesService {
               slug: item.slug,
               trainings: item.trainings,
               informations: item.acf.informations,
-              apo_points: item.acf.informations.apo_points,
-            })),
+              apo_points: item.acf.informations.apo_points
+            }))
           );
         })
         .catch(error => reject(error));
@@ -92,7 +93,7 @@ export default class TrainingSeriesService {
   static fetchLatestPremium() {
     return new Promise((resolve, reject) => {
       window.axios
-        .get('/wp-json/wc/v2/latest-training-series-premium')
+        .get("/wp-json/wc/v2/latest-training-series-premium")
         .then(({ data }) => {
           // console.log('latest premium data', data);
           resolve(
@@ -106,8 +107,8 @@ export default class TrainingSeriesService {
               id: item.id,
               slug: item.slug,
               trainings: item.trainings,
-              informations: item.acf.informations,
-            })),
+              informations: item.acf.informations
+            }))
           );
         })
         .catch(error => reject(error));
@@ -117,7 +118,7 @@ export default class TrainingSeriesService {
   static fetchSurveys() {
     return new Promise((resolve, reject) => {
       window.axios
-        .get('/wp-json/wc/v2/incomplete_survey')
+        .get("/wp-json/wc/v2/incomplete_survey")
         .then(({ data }) => {
           resolve(
             data.map(item => ({
@@ -126,8 +127,8 @@ export default class TrainingSeriesService {
               thumbnail: item.thumbnail,
               category: item.category,
               description: item.description,
-              id: item.id,
-            })),
+              id: item.id
+            }))
           );
         })
         .catch(error => reject(error));
@@ -137,7 +138,7 @@ export default class TrainingSeriesService {
   static fetchAvailableAndCompletedTrainings() {
     return new Promise((resolve, reject) => {
       window.axios
-        .get('/wp-json/wc/v2/count_overview_training')
+        .get("/wp-json/wc/v2/count_overview_training")
         .then(({ data }) => {
           // console.log('Av data', data);
           resolve(data);

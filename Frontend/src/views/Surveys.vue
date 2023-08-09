@@ -1,10 +1,7 @@
 <template>
   <apo-restrict-content-wrapper>
     <div v-if="isOverview">
-      <available-surveys
-        :show-header-section="true"
-        :surveys-title-text="surveysTitleText"
-      />
+      <available-surveys :show-header-section="true" :surveys-title-text="surveysTitleText"></available-surveys>
     </div>
     <template v-else>
       <apo-survey
@@ -16,20 +13,20 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 
 import CmsContentRenderer from '@/components/cms/CmsContentRenderer.vue';
 import Survey from '@/components/survey/Survey.vue';
-import AvailableSurveys from '@/components/survey/overview/AvailableSurveys';
+import AvailableSurveys from "@/components/survey/overview/AvailableSurveys";
 import themeSettings from '@/mixins/theme-settings';
 import { canonicalTag } from '@/services/utils';
-import { SURVEYS_FETCH_ALL } from '@/store/types/action-types';
+import {SURVEYS_FETCH_ALL} from "@/store/types/action-types";
 
 export default {
   components: {
     'apo-cms-content-renderer': CmsContentRenderer,
     'apo-survey': Survey,
-    'available-surveys': AvailableSurveys,
+    'available-surveys': AvailableSurveys
   },
 
   mixins: [themeSettings('survey')],
@@ -110,10 +107,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions([SURVEYS_FETCH_ALL]),
+  ...mapActions([SURVEYS_FETCH_ALL])
   },
   created() {
-    if (this.$route.params.id) {
+    if (this.$route.params.id){
       this[SURVEYS_FETCH_ALL]().catch(error => {
         console.log('error retrieving the surveys', error);
       });

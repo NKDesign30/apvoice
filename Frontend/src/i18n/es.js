@@ -149,6 +149,7 @@ export default {
   },
 
   newsletter: {
+    popup: 'He leído y conozco la política de privacidad.',
     subscribe: "Suscríbete al boletín",
     decline: "disminución",
   },

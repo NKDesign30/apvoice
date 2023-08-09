@@ -11,7 +11,7 @@
           class="flex justify-center px-2"
           for="settings"
         >
-          <div class="w-full rounded-lg shadow-lg newsletterPopover desktop:w-1/2">
+          <div class="w-full rounded-lg shadow-lg newsletterPopover desktop:w-2/2">
             <div class="flex justify-end">
               <div
                 class="p-4 cursor-pointer"
@@ -28,7 +28,7 @@
             </div>
             <div
               class="px-12"
-              v-html="settings.newsletterPopover"
+              v-html="settings.newsletterPopove"
             />
             <form @submit.prevent="submit()">
               <label class="flex items-baseline px-12 mt-2 mb-2 checkbox">
@@ -37,8 +37,10 @@
                   required
                   class="mr-3"
                 >
-                <span v-html="settings.newsletterPrivacy" />
-              </label>
+                <p
+                  class="text-center"
+                  v-text="$t('newsletter.popup')"
+                /></label>
               <div class="flex flex-col items-center justify-center p-6">
                 <apo-button
                   class="mb-4 text-red-300 shadow-hard-dark"
@@ -75,7 +77,7 @@
           />
         </router-link>
       </div>
-      
+
       <div class="flex w-1/3 justify-center">
         <img
           class="h-auto max-w-full"
@@ -88,9 +90,11 @@
     </div>
 
 
-    
-    <div class="container flex max-w-7xl desktop:px-5" v-if="isAuthenticated">
-      <div class="w-0 desktop:w-3/12 z-10 desktop:p-10 desktop:pr-0 pt-0" >
+    <div
+      v-if="isAuthenticated"
+      class="container flex max-w-7xl desktop:px-5"
+    >
+      <div class="w-0 desktop:w-3/12 z-10 desktop:p-10 desktop:pr-0 pt-0">
         <apo-desktop-navigation />
       </div>
       <div
@@ -112,7 +116,6 @@
       </div>
 
 
-
       <div
         v-if="!isAuthenticated"
         class="flex items-center justify-center w-1/2"
@@ -132,8 +135,10 @@
       </div>
 
 
-
-      <div class="w-1/3 dekstop:w-1/2 desktop:justify-center mr-0 desktop:p-10 flex justify-end ml-12 py-4 mr-5 items-justify mt-4 desktop:mt-0" id="customleftbar">
+      <div
+        id="customleftbar"
+        class="w-1/3 dekstop:w-1/2 desktop:justify-center mr-0 desktop:p-10 flex justify-end ml-12 py-4 mr-5 items-justify mt-4 desktop:mt-0"
+      >
         <router-link
           v-if="isAuthenticated"
           class="flex-col items-center justify-center hidden text-white desktop:inline-flex desktop:ml-8"
@@ -164,6 +169,7 @@
 <script>
 
 import { mapGetters, mapState } from 'vuex';
+import axios from 'axios';
 import DesktopNavigation from '@/components/template/DesktopNavigation.vue';
 import MobileNavigation from '@/components/template/MobileNavigation.vue';
 import { AUTH_LOGOUT } from '@/store/types/action-types';
@@ -189,48 +195,39 @@ export default {
     user: {
       immediate: true,
       handler() {
-        this.toggleNewsletterPopover();
+        this.checkNewsletterPopup();
       },
     },
 
     settings: {
       immediate: true,
       handler() {
-        this.toggleNewsletterPopover();
+        this.checkNewsletterPopup();
       },
     },
     currentRouteName() {
-         if(this.$route.name=="/"){
-          return(true)
-         }else{
-          return(false);
-         }
-    }
+      if (this.$route.name == '/') {
+        return (true);
+      }
+      return (false);
+    },
   },
 
   methods: {
-    submit() {
-      sessionStorage.setItem('newsletterState', true);
-      window.axios.get('/wp-json/apovoice/v1/users/acceptNewsletter');
-      this.showNewsletterNote = false;
+    async checkNewsletterPopup() {
+      const response = await window.axios.get(`/wp-json/wc/v2/should_show_newsletter_popup/${this.userId}`);
+      this.showNewsletterNote = response.data;
     },
 
-    toggleNewsletterPopover() {
-      if (this.settings.newsletterPopover !== '' && this.isAuthenticated && this.userId > 0) {
-        let state = sessionStorage.getItem('newsletterState');
-        if (state === null && this.user.newsletterState !== true) {
-          state = false;
-        } else {
-          state = true;
-        }
-
-        new Promise(r => setTimeout(r, 5000)).then(() => {
-          this.showNewsletterNote = !state;
-        });
-      }
+    async submit() {
+      await window.axios.post(`/wp-json/wc/v2/update_last_newsletter_popup_date/${this.userId}`);
+      this.showNewsletterNote = false;
+      sessionStorage.setItem('newsletterState', true);
+      window.axios.get('/wp-json/apovoice/v1/users/acceptNewsletter');
     },
 
     hideNewsletterNote() {
+      this.submit(); // Update the last popup date when the user closes the popup
       sessionStorage.setItem('newsletterState', false);
       this.showNewsletterNote = false;
     },
@@ -238,20 +235,20 @@ export default {
     logout() {
       this.$store.dispatch(AUTH_LOGOUT);
     },
-   carouselgap(){
-     return(document.querySelectorAll('.VueCarousel-slide'));
-   },
-   removegap(){
-     setInterval(()=>{
-      let items=this.carouselgap();
-      items.forEach((item)=>{
-        item.getElementsByClassName.flexBasis="0 !important;";
-      })
-     },1000)
-   }
+    carouselgap() {
+      return (document.querySelectorAll('.VueCarousel-slide'));
+    },
+    removegap() {
+      setInterval(() => {
+        const items = this.carouselgap();
+        items.forEach(item => {
+          item.getElementsByClassName.flexBasis = '0 !important;';
+        });
+      }, 1000);
+    },
   },
-   mounted() {
-   // this.removegap();
+  mounted() {
+    // this.removegap();
   },
 };
 
@@ -278,14 +275,14 @@ export default {
  padding-bottom: 100px !important;
     }
   }
- 
+
 .header {
   @apply py-5;
   @apply border-b-2;
   @apply border-white;
   @screen tablet {
     @apply py-11;
-  } 
+  }
   padding-top:0 !important;
   max-height: 122px;
   background: linear-gradient(120deg, theme('colors.blue.700'), theme('colors.blue.500'));
@@ -297,7 +294,7 @@ export default {
   .theme-training & {
 background-image: linear-gradient(to right, #2ca6f9, #4ab5f7, #69c2f4, #87cff2, #a6dbf0);
   }
-  
+
   .theme-welcome & {
  background-image: linear-gradient(to right, #0243b9, #0058ca, #006cda, #0080e8, #1894f6);
 
@@ -305,7 +302,7 @@ background-image: linear-gradient(to right, #2ca6f9, #4ab5f7, #69c2f4, #87cff2, 
    .theme-profile & {
  background-image: linear-gradient(to right, #0243b9, #0058ca, #006cda, #0080e8, #1894f6);
   }
-  
+
    .theme-redeem & {
   background-image: linear-gradient(to right, #fc7021, #fd821f, #fe921f, #fea223, #fdb22b);
   }
@@ -328,7 +325,6 @@ background-image: linear-gradient(to right, #2ca6f9, #4ab5f7, #69c2f4, #87cff2, 
 .ptt{
   padding-top: 20px;
 }
- 
+
 
 </style>
-
