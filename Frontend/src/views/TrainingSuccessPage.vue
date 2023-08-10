@@ -99,7 +99,6 @@
           v-text="$t('trainings.buttons.nextTraining')"
         />
         <div
-          v-if="language != 'de' && language != 'at'"
           id="related"
         >
           <h3
@@ -112,9 +111,7 @@
             v-if="isAllRelatedcomplete"
             class="mt-10 mb-10 text-gray-700"
             v-text="$t('trainings.successPage.hint.latestIncompleteT')"
-          >
-  
-          </h3>
+          />
           <div
             v-for="(training, index) in this.currentTrainingSeries.related"
             v-if="!isAllRelatedcomplete"
@@ -132,7 +129,7 @@
             <single-training
               :training="LatestIncompleteTrainings[0]"
               :theme="theme"
-              :relation="true"
+              :relation="false"
             />
           </div>
         </div>
