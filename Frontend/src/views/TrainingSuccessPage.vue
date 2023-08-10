@@ -99,6 +99,7 @@
           v-text="$t('trainings.buttons.nextTraining')"
         />
         <div
+
           id="related"
         >
           <h3
@@ -120,6 +121,7 @@
             <related-training
               :current-training="training"
               :theme="theme"
+              :filter-category="origin === 'scientific' ? 'scientific' : ''"
             />
           </div>
           <div
