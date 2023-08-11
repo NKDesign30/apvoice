@@ -60,7 +60,9 @@ export default {
     },
     async [DOWNLOADS_FETCH_DOWNLOAD_MEDIATYPES]({ commit }) {
       try {
+        console.log('DOWNLOADS_FETCH_DOWNLOAD_MEDIATYPES Aktion wird aufgerufen');
         const mediaTypes = await DownloadsService.fetchDownloadMediatypes();
+        console.log('Abgerufene Medientypen:', mediaTypes);
         commit(SET_MEDIA_TYPES, mediaTypes);
       } catch (error) {
         console.error('Fehler beim Abrufen der Medientypen:', error);
