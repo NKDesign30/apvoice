@@ -3,13 +3,19 @@ import DownloadsService from '@/services/api/DownloadsService';
 import {
   DOWNLOADS_FETCH_ALL,
   DOWNLOADS_FETCH_ONE,
+  DOWNLOADS_FETCH_DOWNLOAD_MEDIATYPES, // Hinzugefügt
 } from '../types/action-types';
-import { DOWNLOADS_UPDATE_DOWNLOADS, DOWNLOADS_UPDATE_CURRENT_DOWNLOAD } from '../types/mutation-types';
+import {
+  DOWNLOADS_UPDATE_DOWNLOADS,
+  DOWNLOADS_UPDATE_CURRENT_DOWNLOAD,
+  SET_MEDIA_TYPES, // Hinzugefügt
+} from '../types/mutation-types';
 
 export default {
   state: {
     downloads: [],
     currentDownload: {},
+    mediaTypes: [], // Hinzugefügt
   },
 
   mutations: {
@@ -17,7 +23,7 @@ export default {
       state.downloads = updatedDownloads;
     },
     [SET_MEDIA_TYPES](state, mediaTypes) {
-      console.log('Medientypen im Vuex Store setzen:', mediaTypes); // Hinzugefügt
+      console.log('Medientypen im Vuex Store setzen:', mediaTypes);
       state.mediaTypes = mediaTypes;
     },
     [DOWNLOADS_UPDATE_CURRENT_DOWNLOAD](state, updatedCurrentDownload) {
@@ -52,6 +58,14 @@ export default {
           }).catch(reject);
       });
     },
+    async [DOWNLOADS_FETCH_DOWNLOAD_MEDIATYPES]({ commit }) {
+      try {
+        const mediaTypes = await DownloadsService.fetchDownloadMediatypes();
+        commit(SET_MEDIA_TYPES, mediaTypes);
+      } catch (error) {
+        console.error('Fehler beim Abrufen der Medientypen:', error);
+      }
+    },
   },
 
   getters: {
@@ -63,6 +77,9 @@ export default {
     },
     downloadById(state) {
       return id => state.downloads.find(download => download.id === id);
+    },
+    mediaTypes(state) { // Hinzugefügt
+      return state.mediaTypes;
     },
   },
 };
