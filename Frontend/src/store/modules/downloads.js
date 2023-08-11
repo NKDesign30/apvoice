@@ -23,7 +23,7 @@ export default {
       state.downloads = updatedDownloads;
     },
     [SET_MEDIA_TYPES](state, mediaTypes) {
-      console.log('Medientypen im Vuex Store setzen:', mediaTypes);
+      console.log('In der Mutation SET_MEDIA_TYPES:', mediaTypes); // Diesen Log hinzufügen
       state.mediaTypes = mediaTypes;
     },
     [DOWNLOADS_UPDATE_CURRENT_DOWNLOAD](state, updatedCurrentDownload) {
@@ -62,7 +62,7 @@ export default {
       try {
         console.log('DOWNLOADS_FETCH_DOWNLOAD_MEDIATYPES Aktion wird aufgerufen');
         const mediaTypes = await DownloadsService.fetchDownloadMediatypes();
-        console.log('Abgerufene Medientypen:', mediaTypes);
+        console.log('Abgerufene Medientypen12:', mediaTypes);
         commit(SET_MEDIA_TYPES, mediaTypes);
       } catch (error) {
         console.error('Fehler beim Abrufen der Medientypen:', error);
