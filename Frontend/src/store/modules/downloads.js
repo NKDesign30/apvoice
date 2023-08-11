@@ -16,6 +16,10 @@ export default {
     [DOWNLOADS_UPDATE_DOWNLOADS](state, updatedDownloads) {
       state.downloads = updatedDownloads;
     },
+    [SET_MEDIA_TYPES](state, mediaTypes) {
+      console.log('Medientypen im Vuex Store setzen:', mediaTypes); // Hinzugefügt
+      state.mediaTypes = mediaTypes;
+    },
     [DOWNLOADS_UPDATE_CURRENT_DOWNLOAD](state, updatedCurrentDownload) {
       state.currentDownload = updatedCurrentDownload;
     },
