@@ -51,11 +51,11 @@ function apo_show_extra_profile_fields($user)
     $gfentry = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}gf_entry gfe JOIN {$wpdb->prefix}gf_entry_meta gfem ON gfe.id = gfem.entry_id WHERE gfe.created_by = {$user->ID} AND gfe.form_id = {$requestForm}");
     $entry = GFAPI::get_entry($gfentry[0]->entry_id);
 
-if (isset($_POST['confirmationMail'])) {
-    // Überprüfen, ob die E-Mail-Adresse des Benutzers vorhanden ist und eine gültige E-Mail-Adresse ist
-    $user_email = $user->user_email;
-    if (filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
-        $email_to = $user_email;
+    if (isset($_POST['confirmationMail'])) {
+        // Überprüfen, ob die E-Mail-Adresse des Benutzers vorhanden ist und eine gültige E-Mail-Adresse ist
+        $user_email = $user->user_email;
+        if (filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
+            $email_to = $user_email;
 
             // E-Mail-Betreff und -Inhalt
             $subject = "Los geht's!";
