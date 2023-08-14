@@ -52,30 +52,9 @@ function apo_show_extra_profile_fields($user)
     $entry = GFAPI::get_entry($gfentry[0]->entry_id);
 
     if (isset($_POST['confirmationMail'])) {
-        // Überprüfen, ob die E-Mail-Adresse des Benutzers vorhanden ist und eine gültige E-Mail-Adresse ist
-        $user_email = $user->user_email;
-        if (filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
-            $email_to = $user_email;
-
-            // E-Mail-Betreff und -Inhalt
-            $subject = "Los geht's!";
-            $message = "Dein apovoice Account ist startklar. Du kannst Dich jetzt einloggen und loslegen. Wir wünschen Dir viel Spaß auf unserer Online-Plattform.";
-
-            // E-Mail senden
-            if (wp_mail($email_to, $subject, $message)) {
-                // E-Mail erfolgreich gesendet
-                echo "E-Mail erfolgreich gesendet.";
-            } else {
-                // Fehler beim Senden der E-Mail
-                echo "Fehler beim Senden der E-Mail. Bitte überprüfe deine Servereinstellungen.";
-            }
-        } else {
-            // $lead['email'] ist nicht vorhanden oder keine gültige E-Mail-Adresse
-            echo "Die E-Mail-Adresse ist nicht angegeben oder ungültig.";
-        }
+        GFAPI::send_notifications($requestForm, $lead, "manual");
+        return;
     }
-
-
 ?>
 
     <h3><?php esc_html_e('Additional Fields', 'apovoice') ?></h3>
