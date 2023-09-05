@@ -12,7 +12,8 @@ export default class TrainingMapper {
       categories: get(data, 'training-category', []),
       pghealth: get(data, 'pghealth', 0),
       product: get(data, 'product', 0),
-      trainings: (get(data, 'trainings') || []).map(training => TrainingMapper.mapTrainingInSeries(training)),
+      trainings: Array.isArray(get(data, 'trainings')) ? get(data, 'trainings').map(training => TrainingMapper.mapTrainingInSeries(training)) : [],
+      /* trainings: (get(data, 'trainings') || []).map(training => TrainingMapper.mapTrainingInSeries(training)), */
       /* TrainingMapper.sortTrainings(
         //  data
         get(data, "trainings", []).map(training => TrainingMapper.mapTrainingInSeries(training))
