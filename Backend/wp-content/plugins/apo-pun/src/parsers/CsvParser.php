@@ -21,7 +21,7 @@ class CsvParser extends AbstractExpertCodeDocumentParser
                 $result[] = [
                     'pharmacy_unique_number' => $row[0],
                     'name' => $row[1],
-                    'Role' => $row[2]  // Hinzufügen der Rolle zum resultierenden Array
+                    'role_id' => $row[2]  // Hinzufügen der Rolle zum resultierenden Array
                 ];
             }
         }
