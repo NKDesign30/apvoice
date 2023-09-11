@@ -60,9 +60,9 @@ class PUNUploadController
                 // Hier überprüfen wir die Rolle aus der CSV und setzen die entsprechende Role_id
                 if (isset($item['Role'])) {
                     if ($item['Role'] == 'HCP') {
-                        $item['role_id'] = 7;
+                        $item['role_id'] = 21;
                     } elseif ($item['Role'] == 'paraHCP') {
-                        $item['role_id'] = 87;
+                        $item['role_id'] = 28;
                     }
                 }
                 $this->pun->create($item);
@@ -108,5 +108,4 @@ class PUNUploadController
     {
         return ParserFactory::makeFromUpload($_FILES[$this->file])->parse();
     }
-
 }
