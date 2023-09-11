@@ -21,7 +21,7 @@ class CsvParser extends AbstractExpertCodeDocumentParser
                 $result[] = [
                     'pharmacy_unique_number' => $row[0],
                     'name' => $row[1],
-                    'role_id' => $row[2]  // Hinzufügen der Rolle zum resultierenden Array
+                    'role_id' => isset($row[2]) ? intval($row[2]) : null  // Stellen Sie sicher, dass die role_id als Integer gelesen wird
                 ];
             }
         }
@@ -29,7 +29,6 @@ class CsvParser extends AbstractExpertCodeDocumentParser
 
         return $result;
     }
-
     /**
      * Determine the used field delimiter by peaking into the first row
      * and finding a reasonable result.
