@@ -18,10 +18,12 @@ class CsvParser extends AbstractExpertCodeDocumentParser
 
         while (($row = fgetcsv($fp, 0, ',')) !== false) {
             if ($this->validateRow($row)) {
+                $role_id = isset($row[2]) ? intval($row[2]) : null;
+                error_log('Read role_id from CSV: ' . $role_id);  // Debug-Ausgabe
                 $result[] = [
                     'pharmacy_unique_number' => $row[0],
                     'name' => $row[1],
-                    'role_id' => isset($row[2]) ? intval($row[2]) : null  // Stellen Sie sicher, dass die role_id als Integer gelesen wird
+                    'role_id' => $role_id
                 ];
             }
         }
