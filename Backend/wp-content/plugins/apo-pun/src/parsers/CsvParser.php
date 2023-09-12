@@ -25,6 +25,7 @@ class CsvParser extends AbstractExpertCodeDocumentParser
                     'name' => $row[1],
                     'role_id' => $role_id
                 ];
+                error_log("Role ID from CSV: " . $row[2]);
             }
         }
         fclose($fp);
