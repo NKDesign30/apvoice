@@ -18,14 +18,18 @@ class CsvParser extends AbstractExpertCodeDocumentParser
 
         while (($row = fgetcsv($fp, 0, ',')) !== false) {
             if ($this->validateRow($row)) {
-                $role_id = isset($row[2]) ? intval($row[2]) : null;
-                error_log('Read role_id from CSV: ' . $role_id);  // Debug-Ausgabe
+                $role = isset($row[2]) ? $row[2] : null;  // Lesen Sie die Rolle als Text
+                $role_id = null;
+                if ($role == 'HCP') {
+                    $role_id = 7;
+                } elseif ($role == 'paraHCP') {
+                    $role_id = 87;
+                }
                 $result[] = [
                     'pharmacy_unique_number' => $row[0],
                     'name' => $row[1],
-                    'role_id' => $role_id
+                    'role_id' => $role_id  // Setzen Sie die role_id basierend auf dem Rollentext
                 ];
-                error_log("Role ID from CSV: " . $row[2]);
             }
         }
         fclose($fp);
