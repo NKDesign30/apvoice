@@ -52,12 +52,11 @@ class PUNUploadController
                     $countUpdated++;
                 }
             } else {
-                // Nur dann hinzufügen/aktualisieren, wenn die role_id gültig ist (d.h. größer als 0)
                 if ($item['role_id'] > 0) {
                     $this->pun->create([
                         'pharmacy_unique_number' => $item['pharmacy_unique_number'],
                         'name' => $item['name'],
-                        'role_id' => $item['role_id']  // Hier setzen wir die role_id
+                        'role_id' => $item['role_id'],
                     ]);
                     $countAdded++;
                 }
