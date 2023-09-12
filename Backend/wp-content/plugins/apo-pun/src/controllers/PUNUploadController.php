@@ -49,7 +49,6 @@ class PUNUploadController
 
         $countUpdated = 0;
         $countAdded = 0;
-
         foreach ($values as $item) {
             if ($pun = $this->pun->exists($item['pharmacy_unique_number'])) {
                 if ($this->pun->hasNameChanged($pun->id, $item['name'])) {
@@ -57,16 +56,19 @@ class PUNUploadController
                     $countUpdated++;
                 }
             } else {
-                // Hier überprüfen wir die Rolle aus der CSV und setzen die entsprechende Role_id
-                if (isset($item['Role'])) {
-                    if ($item['Role'] == 'HCP') {
-                        $item['role_id'] = 7;
-                    } elseif ($item['Role'] == 'paraHCP') {
-                        $item['role_id'] = 87;
+                // Stellen Sie sicher, dass die role_id aus der CSV vorhanden ist und nicht leer ist
+                if (isset($item['role_id']) && $item['role_id'] !== null) {
+                    // Nur dann hinzufügen/aktualisieren, wenn die role_id gültig ist (d.h. größer als 0)
+                    if ($item['role_id'] > 0) {
+                        $this->pun->create([
+                            'pharmacy_unique_number' => $item['pharmacy_unique_number'],
+                            'name' => $item['name'],
+                            'role_id' => $item['role_id']  // Hier setzen wir die role_id
+                        ]);
+                        error_log('Inserted role_id into database: ' . $item['role_id']);  // Debug-Ausgabe
+                        $countAdded++;
                     }
                 }
-                $this->pun->create($item);
-                $countAdded++;
             }
         }
 
