@@ -241,6 +241,13 @@
               class="my-2 text-3xl text-center tablet:text-5xl desktop:text-6xl"
               v-text="$tc('pages.editProfile.pharmacies.yourPharmacy', form.pharmacies.length)"
             />
+            <div class="text-center text-xl tablet:text-2xl text-gray-800 mt-7 mb-8">
+              <span v-text="$t('general.myPUNandPharmacy')" />
+            </div>
+            <h3 class="my-2 text-center mt-7 mb-8">
+              {{ displayedPun }} - {{ displayedPharmacyName }}
+            </h3>
+
             <div>
               <div class="px-4 mb-8">
                 <apo-input-label
@@ -270,7 +277,7 @@
                 </div>
 
                 <apo-input-label
-
+                  v-if="language !='de'"
                   for="pharmacy-name"
                   class="mb-4"
                   v-text="$t('modules.pharmacySummary.form.pharmacyName')"
@@ -282,7 +289,7 @@
                   :placeholder="$t('modules.pharmacySummary.form.pharmacyName')"
                   class="mt-2 readonly"
                 />
-                <div class="flex mt-12 button-positioning">
+                <div class="flex m-12 button-positioning justify-center">
                   <apo-button
                     class="ml-4 submit-button button button--primary button--small"
                     :class="{ 'is-busy cursor-wait': isPUNBusy }"
@@ -472,6 +479,8 @@ import PharmacySummary from '@/components/pharmacies/PharmacySummary.vue';
 import LoadingOverlay from '@/components/ui/LoadingOverlay.vue';
 import UserService from '@/services/api/UserService';
 import RestErrors from '@/services/form/RestErrors';
+
+
 import {
   AUTH_FETCH_CURRENT_USER,
   FORMS_FETCH_FORM,
@@ -558,6 +567,8 @@ export default {
       isPUNBusy: false,
       errors: new RestErrors(),
       profilePicture: null,
+      displayedPun: '',
+      displayedPharmacyName: '',
     };
   },
 
@@ -873,11 +884,21 @@ export default {
         window.location.href = this.$route.hash;
       });
     }
+
+    // Daten für PUN und Apothekenname abrufen
     this[PHARMACIES_FETCH_PUN]().then(data => {
       this.myPun = data.pharmacy_unique_number;
       this.PharmacyName = data.name;
     });
+
+    // Daten für die Anzeige abrufen (angenommen, Ihre API gibt die richtigen Daten zurück)
+    UserService.fetchUserData().then(response => {
+      console.log('User Data Response:', response);
+      this.displayedPun = response.data.pun || this.myPun; // Falls die API keinen Wert zurückgibt, verwenden Sie den Wert von myPun
+      this.displayedPharmacyName = response.data.pharmacyName || this.PharmacyName; // Gleiches hier
+    });
   },
+
 };
 </script>
 
