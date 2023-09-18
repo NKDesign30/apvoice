@@ -241,23 +241,16 @@
               class="my-2 text-3xl text-center tablet:text-5xl desktop:text-6xl"
               v-text="$tc('pages.editProfile.pharmacies.yourPharmacy', form.pharmacies.length)"
             />
-            <div class="text-center text-xl tablet:text-2xl text-gray-800 mt-7 mb-8">
-              <span v-text="$t('general.myPUNandPharmacy')" />
-            </div>
-            <h3 class="my-2 text-center mt-7 mb-8">
-              {{ displayedPun }} - {{ displayedPharmacyName }}
-            </h3>
-
             <div>
               <div class="px-4 mb-8">
                 <apo-input-label
-
+                  v-if="language != 'de' && language != 'at'"
                   for="pharmacy-pun"
                   class="mb-4"
                   v-text="$t('modules.pharmacySummary.form.punCode')"
                 />
                 <apo-input
-
+                  v-if="language != 'de' && language != 'at'"
                   id="pharmacy-pun"
                   v-model="myPun"
                   :placeholder="$t('modules.pharmacySummary.form.punCode')"
@@ -277,35 +270,21 @@
                 </div>
 
                 <apo-input-label
-                  v-if="language !='de'"
+                  v-if="language != 'de' && language != 'at'"
                   for="pharmacy-name"
                   class="mb-4"
                   v-text="$t('modules.pharmacySummary.form.pharmacyName')"
                 />
                 <apo-input
-
+                  v-if="language != 'de' && language != 'at'"
                   id="pharmacy-name"
                   v-model="PharmacyName"
                   :placeholder="$t('modules.pharmacySummary.form.pharmacyName')"
                   class="mt-2 readonly"
                 />
-                <div class="flex m-12 button-positioning justify-center">
-                  <apo-button
-                    class="ml-4 submit-button button button--primary button--small"
-                    :class="{ 'is-busy cursor-wait': isPUNBusy }"
-                    :disabled="isPUNBusy"
-                    @click.native="submitPUNCode"
-                  >
-                    <apo-spinner
-                      v-if="isPUNBusy"
-                      class="mr-4"
-                      size="small"
-                    />
-                    <span v-text="$t('general.savePUNCode')" />
-                  </apo-button>
-                </div>
-                <apo-pharmacies-fuzzy-search
 
+                <apo-pharmacies-fuzzy-search
+                  v-if="language == 'de' || language == 'at'"
                   @selected="onSelectPharmacy"
                 >
                   <div class="flex flex-col mt-2 tablet:flex-row">
@@ -327,138 +306,138 @@
                 </apo-pharmacies-fuzzy-search>
               </div>
               <apo-add-pharmacy-form
-
+                v-if="language == 'de' || language == 'at'"
                 :form="pharmacyForm"
                 read-only
               />
             </div>
-
-            <apo-pharmacy-summary v-model="form.pharmacies" />
+            <div v-if="language == 'de' || language == 'at'">
+              <apo-pharmacy-summary v-model="form.pharmacies" />
+            </div>
           </div>
-        </div>
 
-        <div class="w-10/12 mx-auto mt-16">
-          <a
-            id="your-account"
-            class="anchor"
-          />
-          <h1
-            class="my-2 text-3xl text-center tablet:text-5xl desktop:text-6xl"
-            v-text="$t('pages.editProfile.account.headline')"
-          />
-        </div>
-
-        <div class="w-10/12 mx-auto mt-12">
-          <div class="tablet:mr-4 tablet:w-1/2">
-            <apo-input-label v-text="$t('general.emailAddress')" />
-
-            <apo-input
-              v-model="form.account.email"
-              class="mt-2 readonly"
-              readonly
-              @keydown.enter="submit"
+          <div class="w-10/12 mx-auto mt-16">
+            <a
+              id="your-account"
+              class="anchor"
             />
+            <h1
+              class="my-2 text-3xl text-center tablet:text-5xl desktop:text-6xl"
+              v-text="$t('pages.editProfile.account.headline')"
+            />
+          </div>
 
+          <div class="w-10/12 mx-auto mt-12">
+            <div class="tablet:mr-4 tablet:w-1/2">
+              <apo-input-label v-text="$t('general.emailAddress')" />
+
+              <apo-input
+                v-model="form.account.email"
+                class="mt-2 readonly"
+                readonly
+                @keydown.enter="submit"
+              />
+
+              <apo-input-error
+                :errors="errors"
+                field="account_email"
+              />
+            </div>
+          </div>
+
+          <div class="w-10/12 mx-auto mt-8 tablet:mt-12 tablet:flex tablet:justify-center">
+            <div class="tablet:mr-4 tablet:w-1/2">
+              <apo-input-label v-text="$t('pages.editProfile.account.newEmailAddress')" />
+
+              <apo-input
+                v-model="form.account.newEmail"
+                class="mt-2"
+                @keydown.enter="submit"
+              />
+            </div>
+            <div class="mt-8 tablet:mt-0 tablet:ml-4 tablet:w-1/2">
+              <apo-input-label v-text="$t('pages.editProfile.account.confirmNewEmailAddress')" />
+
+              <apo-input
+                v-model="form.account.newEmailConfirm"
+                class="mt-2"
+                @keydown.enter="submit"
+              />
+            </div>
+          </div>
+
+          <div class="w-10/12 mx-auto mt-3">
+            <p
+              v-if="
+                form.account.newEmail !== '' &&
+                  form.account.newEmailConfirm !== '' &&
+                  form.account.newEmail === form.account.newEmailConfirm
+              "
+              v-html="$t('pages.editProfile.account.newEmailAddressNotification')"
+            />
+          </div>
+
+          <div class="w-10/12 mx-auto mt-2">
             <apo-input-error
               :errors="errors"
-              field="account_email"
+              field="account_new_email"
             />
           </div>
-        </div>
 
-        <div class="w-10/12 mx-auto mt-8 tablet:mt-12 tablet:flex tablet:justify-center">
-          <div class="tablet:mr-4 tablet:w-1/2">
-            <apo-input-label v-text="$t('pages.editProfile.account.newEmailAddress')" />
+          <div class="w-10/12 mx-auto mt-8 tablet:mt-12 tablet:flex tablet:justify-center">
+            <div class="tablet:mr-4 tablet:w-1/2">
+              <apo-input-label v-text="$t('general.password')" />
 
-            <apo-input
-              v-model="form.account.newEmail"
-              class="mt-2"
-              @keydown.enter="submit"
+              <apo-input
+                v-model="form.account.password"
+                type="password"
+                class="mt-2"
+                @keydown.enter="submit"
+              />
+            </div>
+            <div class="mt-8 tablet:mt-0 tablet:ml-4 tablet:w-1/2">
+              <apo-input-label v-text="$t('pages.editProfile.account.confirmPassword')" />
+
+              <apo-input
+                v-model="form.account.passwordconfirm"
+                type="password"
+                class="mt-2"
+                @keydown.enter="submit"
+              />
+            </div>
+          </div>
+
+          <div class="mt-2">
+            <apo-input-error
+              :errors="errors"
+              field="account_password"
             />
           </div>
-          <div class="mt-8 tablet:mt-0 tablet:ml-4 tablet:w-1/2">
-            <apo-input-label v-text="$t('pages.editProfile.account.confirmNewEmailAddress')" />
 
-            <apo-input
-              v-model="form.account.newEmailConfirm"
-              class="mt-2"
-              @keydown.enter="submit"
+          <div class="flex mt-12 button-positioning">
+            <apo-button
+              class="mr-6 text-gray-900 button button--naked button--small shadow-hard"
+              @click.native="$router.push({ name: 'profile' })"
+              v-text="$t('general.cancel')"
             />
+
+            <apo-button
+              class="ml-4 submit-button button button--primary button--small"
+              :class="{ 'is-busy cursor-wait': isBusy }"
+              :disabled="isBusy"
+              @click.native="submit"
+            >
+              <apo-spinner
+                v-if="isBusy"
+                class="mr-4"
+                size="small"
+              />
+
+              <span v-text="$t('general.save')" />
+            </apo-button>
           </div>
-        </div>
-
-        <div class="w-10/12 mx-auto mt-3">
-          <p
-            v-if="
-              form.account.newEmail !== '' &&
-                form.account.newEmailConfirm !== '' &&
-                form.account.newEmail === form.account.newEmailConfirm
-            "
-            v-html="$t('pages.editProfile.account.newEmailAddressNotification')"
-          />
-        </div>
-
-        <div class="w-10/12 mx-auto mt-2">
-          <apo-input-error
-            :errors="errors"
-            field="account_new_email"
-          />
-        </div>
-
-        <div class="w-10/12 mx-auto mt-8 tablet:mt-12 tablet:flex tablet:justify-center">
-          <div class="tablet:mr-4 tablet:w-1/2">
-            <apo-input-label v-text="$t('general.password')" />
-
-            <apo-input
-              v-model="form.account.password"
-              type="password"
-              class="mt-2"
-              @keydown.enter="submit"
-            />
-          </div>
-          <div class="mt-8 tablet:mt-0 tablet:ml-4 tablet:w-1/2">
-            <apo-input-label v-text="$t('pages.editProfile.account.confirmPassword')" />
-
-            <apo-input
-              v-model="form.account.passwordconfirm"
-              type="password"
-              class="mt-2"
-              @keydown.enter="submit"
-            />
-          </div>
-        </div>
-
-        <div class="mt-2">
-          <apo-input-error
-            :errors="errors"
-            field="account_password"
-          />
-        </div>
-
-        <div class="flex mt-12 button-positioning">
-          <apo-button
-            class="mr-6 text-gray-900 button button--naked button--small shadow-hard"
-            @click.native="$router.push({ name: 'profile' })"
-            v-text="$t('general.cancel')"
-          />
-
-          <apo-button
-            class="ml-4 submit-button button button--primary button--small"
-            :class="{ 'is-busy cursor-wait': isBusy }"
-            :disabled="isBusy"
-            @click.native="submit"
-          >
-            <apo-spinner
-              v-if="isBusy"
-              class="mr-4"
-              size="small"
-            />
-
-            <span v-text="$t('general.save')" />
-          </apo-button>
         </div>
       </div>
-    </div>
     </div>
   </apo-wait>
 </template>
@@ -479,8 +458,6 @@ import PharmacySummary from '@/components/pharmacies/PharmacySummary.vue';
 import LoadingOverlay from '@/components/ui/LoadingOverlay.vue';
 import UserService from '@/services/api/UserService';
 import RestErrors from '@/services/form/RestErrors';
-
-
 import {
   AUTH_FETCH_CURRENT_USER,
   FORMS_FETCH_FORM,
@@ -564,11 +541,8 @@ export default {
       ],
       ages: ['< 24', '25 - 34', '35 - 44', '45 - 54', '55 - 64', '65 +'],
       isBusy: false,
-      isPUNBusy: false,
       errors: new RestErrors(),
       profilePicture: null,
-      displayedPun: '',
-      displayedPharmacyName: '',
     };
   },
 
@@ -736,26 +710,6 @@ export default {
     fetchNewMailForm() {
       this.$store.dispatch(FORMS_FETCH_FORM, this.formId);
     },
-    submitPUNCode() {
-      const data = new FormData();
-      data.append('associated_pharmacies', this.myPun);
-
-      this.isPUNBusy = true;
-
-      UserService.updatePunCode(this.user, data.associated_pharmacies[0])
-        .then(() => {
-          this.$store.dispatch(AUTH_FETCH_CURRENT_USER);
-        })
-        .catch(({ response }) => {
-          this.errors.clear();
-          if (response.status === 400 && response.data.code === 'rest_invalid_param') {
-            this.errors.assign(response.data.data.params);
-          }
-        })
-        .finally(() => {
-          this.isPUNBusy = false;
-        });
-    },
 
     update() {
       // this.$store.dispatch(PHARMACIES_UPDATE_PUN_ACTION, this.myPun);
@@ -786,9 +740,9 @@ export default {
       data.append('account_password', this.form.account.password);
       data.append('account_password_confirmation', this.form.account.passwordconfirm);
       data.append('age', this.form.age);
-      data.append('first_name', this.form.firstName);
+      data.append('first_name', this.form.firstName || '');
       data.append('form_of_address', this.form.formOfAddress);
-      data.append('last_name', this.form.lastName);
+      data.append('last_name', this.form.lastName || '');
       data.append('job', this.form.job);
       data.append('title', this.form.title);
       data.append('working_since', this.form.workingSince);
@@ -842,21 +796,20 @@ export default {
           this.isBusy = false;
         });
 
-      if (data.associated_pharmacies && data.associated_pharmacies.length > 0) {
-        UserService.updatePunCode(this.user, data.associated_pharmacies[0])
-          .then(() => {
-            this.$store.dispatch(AUTH_FETCH_CURRENT_USER);
-          })
-          .catch(({ response }) => {
-            this.errors.clear();
-            if (response.status === 400 && response.data.code === 'rest_invalid_param') {
-              this.errors.assign(response.data.data.params);
-            }
-          })
-          .finally(() => {
-            this.isBusy = false;
-          });
-      }
+      UserService.updatePunCode(this.user, data.associated_pharmacies[0])
+        .then(() => {
+          this.$store.dispatch(AUTH_FETCH_CURRENT_USER);
+        })
+        .catch(({ response }) => {
+          this.errors.clear();
+
+          if (response.status === 400 && response.data.code === 'rest_invalid_param') {
+            this.errors.assign(response.data.data.params);
+          }
+        })
+        .finally(() => {
+          this.isBusy = false;
+        });
     },
 
     language() {
@@ -884,21 +837,11 @@ export default {
         window.location.href = this.$route.hash;
       });
     }
-
-    // Daten für PUN und Apothekenname abrufen
     this[PHARMACIES_FETCH_PUN]().then(data => {
       this.myPun = data.pharmacy_unique_number;
       this.PharmacyName = data.name;
     });
-
-    // Daten für die Anzeige abrufen (angenommen, Ihre API gibt die richtigen Daten zurück)
-    UserService.fetchUserData().then(response => {
-      console.log('User Data Response:', response);
-      this.displayedPun = response.data.pun || this.myPun; // Falls die API keinen Wert zurückgibt, verwenden Sie den Wert von myPun
-      this.displayedPharmacyName = response.data.pharmacyName || this.PharmacyName; // Gleiches hier
-    });
   },
-
 };
 </script>
 
