@@ -26,18 +26,37 @@ export default class SurveyMapper {
     };
   }
 
+  static saveAnswer(questionId, answer) {
+    localStorage.setItem(questionId, JSON.stringify(answer));
+  }
+
+  static getAnswer(questionId) {
+    const answer = localStorage.getItem(questionId);
+    return answer ? JSON.parse(answer) : null;
+  }
+
   static filterQuestionsBasedOnPreviousAnswers(questions) {
     if (!questions || questions.length <= 1) return questions;
 
     console.log('Original questions:', questions);
-    console.log('Previous answers:', SurveyMapper.previousAnswers);
 
     const filteredQuestions = [questions[0]]; // Die erste Frage bleibt immer unverändert
 
     for (let i = 1; i < questions.length; i++) {
       const currentQuestion = { ...questions[i] };
+      const previousAnswer = SurveyMapper.getAnswer(currentQuestion.id);
+      if (previousAnswer) {
+        SurveyMapper.previousAnswers.push(previousAnswer);
+      }
       currentQuestion.options = currentQuestion.options.filter(option => {
-        const shouldFilter = !(SurveyMapper.previousAnswers[i - 1] && SurveyMapper.previousAnswers[i - 1].value === 1 && SurveyMapper.previousAnswers[i - 1].option === option.label);
+        let shouldFilter = true;
+        if (previousAnswer) {
+          if (previousAnswer.type === 'rating') {
+            shouldFilter = !previousAnswer.value.some(answer => answer.value === '1' && answer.ratingId === option.label);
+          } else if (previousAnswer.type === 'choice-multi' || previousAnswer.type === 'answer-single-line') {
+            shouldFilter = !(previousAnswer.value === '1' && previousAnswer.value === option.label);
+          }
+        }
         if (!shouldFilter) {
           console.log('Filtering option:', option.label, 'for question:', currentQuestion.question);
         }
@@ -49,6 +68,7 @@ export default class SurveyMapper {
     console.log('Filtered questions:', filteredQuestions);
     return filteredQuestions;
   }
+
 
   static mapChapter(data) {
     console.log('Mapping chapter:', data);
