@@ -67,6 +67,7 @@
               class="mx-6 text-center my-12"
               v-bind="question"
               :value="question.value"
+              :previous-value="selectedValues[question.id - 1]"
               @input="onQuestionInput($event, question)"
             />
 
@@ -178,6 +179,7 @@ import Progress from '@/components/ui/Progress.vue';
 import SurveyAnswerMultiLineQuestion from '@/components/survey/SurveyAnswerMultiLineQuestion.vue';
 import SurveyAnswerSingleLineQuestion from '@/components/survey/SurveyAnswerSingleLineQuestion.vue';
 import SurveyRatingQuestion from '@/components/survey/SurveyRatingQuestion.vue';
+import SurveyDynamicRating from '@/components/survey/SurveyDynamicRating.vue';
 import SurveyRatingIconsQuestion from '@/components/survey/SurveyRatingIconsQuestion.vue';
 import SurveyPromoterScoreQuestion from '@/components/survey/SurveyPromoterScoreQuestion.vue';
 import SurveyChoiceQuestion from '@/components/survey/SurveyChoiceQuestion.vue';
@@ -202,6 +204,7 @@ export default {
     'apo-survey-promoter_score-question': SurveyPromoterScoreQuestion,
     'apo-survey-text-paragraph-question': SurveyTextParagraphQuestion,
     'apo-survey-exit-page': SurveyExitPage,
+    'apo-survey-dynamic-rating': SurveyDynamicRating,
   },
 
   props: {
@@ -216,6 +219,7 @@ export default {
       chapter: 1,
       validation: new SurveyValidation(),
       answeredQuestions: [],
+      selectedValues: [], // Hinzugefügt
     };
   },
 
@@ -382,6 +386,10 @@ export default {
         // eslint-disable-next-line no-param-reassign
         question.value = event;
       }
+
+      // Aktualisieren der selectedValues Datenproperty
+      this.selectedValues[question.id] = event.value;
+
       if (this.validation.hasChapter(this.chapter)) {
         this.validateCurrentChapter();
         this.$forceUpdate();
