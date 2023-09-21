@@ -2,8 +2,6 @@ import get from 'lodash/get';
 import uniqueId from 'lodash/uniqueId';
 
 export default class SurveyMapper {
-  static previousAnswers = [];
-
   static mapSurvey(data) {
     return {
       id: String(get(data, 'id', '')),
@@ -26,62 +24,13 @@ export default class SurveyMapper {
     };
   }
 
-  static saveAnswer(questionId, answer) {
-    localStorage.setItem(questionId, JSON.stringify(answer));
-  }
-
-  static getAnswer(questionId) {
-    const answer = localStorage.getItem(questionId);
-    return answer ? JSON.parse(answer) : null;
-  }
-
-  static filterQuestionsBasedOnPreviousAnswers(questions) {
-    if (!questions || questions.length <= 1) return questions;
-
-    console.log('Original questions:', questions);
-
-    const filteredQuestions = [questions[0]]; // Die erste Frage bleibt immer unverändert
-
-    for (let i = 1; i < questions.length; i++) {
-      const currentQuestion = { ...questions[i] };
-      const previousAnswer = SurveyMapper.getAnswer(currentQuestion.id);
-      if (previousAnswer) {
-        SurveyMapper.previousAnswers.push(previousAnswer);
-      }
-      currentQuestion.options = currentQuestion.options.filter(option => {
-        let shouldFilter = true;
-        if (previousAnswer) {
-          if (previousAnswer.type === 'rating') {
-            shouldFilter = !previousAnswer.value.some(answer => answer.value === '1' && answer.ratingId === option.label);
-          } else if (previousAnswer.type === 'choice-multi' || previousAnswer.type === 'answer-single-line') {
-            shouldFilter = !(previousAnswer.value === '1' && previousAnswer.value === option.label);
-          }
-        }
-        if (!shouldFilter) {
-          console.log('Filtering option:', option.label, 'for question:', currentQuestion.question);
-        }
-        return shouldFilter;
-      });
-      filteredQuestions.push(currentQuestion);
-    }
-
-    console.log('Filtered questions:', filteredQuestions);
-    return filteredQuestions;
-  }
-
-
   static mapChapter(data) {
-    console.log('Mapping chapter:', data);
+    // if there is an empty chapter the backend returns false,
+    // to avoid 'map is not a function' conflicts,
+    // catch it and return an empty array
     if (!data.chapter) return [];
-    const questions = get(data, 'chapter', []).map(question => SurveyMapper.mapQuestion(question));
-    if (data.dynamic_filter) {
-      console.log('Dynamic filter is true for chapter:', data);
-      return {
-        questions: SurveyMapper.filterQuestionsBasedOnPreviousAnswers(questions),
-      };
-    }
     return {
-      questions,
+      questions: get(data, 'chapter', []).map(question => SurveyMapper.mapQuestion(question)),
     };
   }
 
@@ -91,7 +40,6 @@ export default class SurveyMapper {
       type: get(data, 'acf_fc_layout', ''),
       question: get(data, 'question', ''),
       subheadline: get(data, 'subheadline', ''),
-      dynamic_filter: get(data, 'acf.dynamic_filter', false),
       isKeyQuestion: get(data, 'is_key_question', false),
       isOptional: get(data, 'is_optional', false),
       parentValue: get(data, 'parent_value', ''),
