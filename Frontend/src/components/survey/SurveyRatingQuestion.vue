@@ -22,7 +22,7 @@
       class="inline-flex flex-wrap justify-center text-center"
     >
       <div
-        v-for="item in items"
+        v-for="item in filteredItems"
         :key="item.id"
         class="flex flex-col flex-wrap justify-center flex-auto mt-10"
       >
@@ -110,6 +110,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    dynamic_filter: {
+      type: Boolean,
+      default: false,
+    },
+    currentChapter: {
+      type: Number,
+      default: 1,
+    },
   },
 
   data() {
@@ -117,7 +125,33 @@ export default {
       selectedOption: '',
     };
   },
+  computed: {
+    filteredItems() {
+      console.log('Dynamic filter:', this.dynamic_filter);
+      console.log('Value:', this.value);
+
+      // Wenn dynamic_filter nicht aktiviert ist, oder keine Antworten vorhanden sind, oder wir uns im ersten Kapitel befinden, geben Sie alle Elemente zurück.
+      if (!this.dynamic_filter || !this.value || this.value.length === 0 || this.currentChapter === 1) {
+        return this.items;
+      }
+
+      // Filtern Sie nur die IDs, die mit dem Wert "1" bewertet wurden
+      const answeredIdsWithRating1 = this.value
+        .filter(v => v.value === '1')
+        .map(v => v.ratingId);
+      console.log('Answered IDs with rating 1:', answeredIdsWithRating1);
+
+      // Filtern Sie die Elemente, die nicht in den IDs von Schritt 2 enthalten sind
+      const filtered = this.items.filter(item => !answeredIdsWithRating1.includes(item.id));
+      console.log('Filtered items:', filtered);
+
+      return filtered;
+    },
+  },
+
+
   mounted() {
+    console.log('dynamic_filter value:', this.dynamic_filter);
     if (this.isCluster) this.$refs.ratingHeader.style.maxWidth = `${this.$refs.ratingOptions.getBoundingClientRect().width}px`;
   },
 
