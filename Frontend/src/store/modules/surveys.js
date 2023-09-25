@@ -13,6 +13,7 @@ import {
   SURVEYS_UPDATE_SURVEYS,
   SURVEYS_UPDATE_CURRENT_SURVEY,
   UPDATE_LATEST_SURVEYS,
+  UPDATE_SURVEY_ANSWERS,
 } from '../types/mutation-types';
 
 export default {
@@ -32,8 +33,15 @@ export default {
     [UPDATE_LATEST_SURVEYS](state, latestsSurveys) {
       state.latestsSurveys = latestsSurveys;
     },
+    [UPDATE_SURVEY_ANSWERS](state, payload) { // Hinzufügen dieser neuen Mutation
+      const chapter = state.surveys.find(s => s.id === payload.chapterId);
+      if (chapter) {
+        chapter.questions.forEach((q, index) => {
+          q.value = payload.answers[index];
+        });
+      }
+    },
   },
-
   actions: {
     [LATESTS_SURVEYS]({ dispatch, commit, state }) {
       if (state.latestsSurveys.length === 0) {
