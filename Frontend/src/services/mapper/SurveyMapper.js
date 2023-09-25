@@ -44,6 +44,8 @@ export default class SurveyMapper {
       isOptional: get(data, 'is_optional', false),
       parentValue: get(data, 'parent_value', ''),
       isNested: get(data, 'is_nested', false),
+      dynamic_filter: get(data, 'dynamic_filter', false),
+
     };
 
     if (question.isNested) {
@@ -199,5 +201,31 @@ export default class SurveyMapper {
       result,
       ...additionalFields,
     };
+  }
+
+  static filterQuestionsByRating(chapters) {
+    const excludedHeadlines = [];
+
+    // Sammeln Sie zuerst alle Überschriften der Rating-Items, die mit einer 1 bewertet wurden
+    chapters.forEach(chapter => {
+      chapter.questions.forEach(question => {
+        if (question.type === 'rating' && question.value === 1 && question.dynamic_filter) {
+          excludedHeadlines.push(question.question);
+        }
+      });
+    });
+
+    // Filtern Sie dann die Rating-Items in den nachfolgenden Kapiteln basierend auf den gesammelten Überschriften
+    chapters.forEach(chapter => {
+      chapter.questions.forEach(question => {
+        if (question.type === 'rating') {
+          question.items = question.items.filter(
+            item => !excludedHeadlines.includes(item.headline),
+          );
+        }
+      });
+    });
+
+    return chapters;
   }
 }
