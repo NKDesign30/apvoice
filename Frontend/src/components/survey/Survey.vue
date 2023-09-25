@@ -64,10 +64,10 @@
             <component
               :is="getSurveyComponent(question)"
               v-if="question.type !== 'question_cluster'"
+              :current-chapter="chapter"
               class="mx-6 text-center my-12"
               v-bind="question"
               :value="question.value"
-              :previous-value="selectedValues[question.id - 1]"
               @input="onQuestionInput($event, question)"
             />
 
@@ -179,7 +179,6 @@ import Progress from '@/components/ui/Progress.vue';
 import SurveyAnswerMultiLineQuestion from '@/components/survey/SurveyAnswerMultiLineQuestion.vue';
 import SurveyAnswerSingleLineQuestion from '@/components/survey/SurveyAnswerSingleLineQuestion.vue';
 import SurveyRatingQuestion from '@/components/survey/SurveyRatingQuestion.vue';
-import SurveyDynamicRating from '@/components/survey/SurveyDynamicRating.vue';
 import SurveyRatingIconsQuestion from '@/components/survey/SurveyRatingIconsQuestion.vue';
 import SurveyPromoterScoreQuestion from '@/components/survey/SurveyPromoterScoreQuestion.vue';
 import SurveyChoiceQuestion from '@/components/survey/SurveyChoiceQuestion.vue';
@@ -204,7 +203,6 @@ export default {
     'apo-survey-promoter_score-question': SurveyPromoterScoreQuestion,
     'apo-survey-text-paragraph-question': SurveyTextParagraphQuestion,
     'apo-survey-exit-page': SurveyExitPage,
-    'apo-survey-dynamic-rating': SurveyDynamicRating,
   },
 
   props: {
@@ -219,7 +217,7 @@ export default {
       chapter: 1,
       validation: new SurveyValidation(),
       answeredQuestions: [],
-      selectedValues: [], // Hinzugefügt
+      excludedHeadlines: [],
     };
   },
 
@@ -254,6 +252,13 @@ export default {
       return (this.user.surveyResults[this.survey.id] !== undefined && this.user.surveyResults[this.survey.id].is_complete);
     },
 
+    previousChapterAnswers() {
+      if (this.chapter > 1) {
+        const previousChapter = this.$store.state.surveys[0].chapters[this.chapter - 2];
+        return previousChapter ? previousChapter.questions.map(q => q.value) : [];
+      }
+      return [];
+    },
     totalQuestions() {
       return this.currentChapter.questions.reduce((accumulator, question) => {
         if (question.type === 'rating') {
@@ -281,7 +286,9 @@ export default {
 
       return text;
     },
-
+    resetExcludedHeadlines() {
+      this.excludedHeadlines = [];
+    },
     validateCurrentChapter() {
       this.validation.resetChapter(this.chapter);
 
@@ -386,15 +393,29 @@ export default {
         // eslint-disable-next-line no-param-reassign
         question.value = event;
       }
-
-      // Aktualisieren der selectedValues Datenproperty
-      this.selectedValues[question.id] = event.value;
-
       if (this.validation.hasChapter(this.chapter)) {
         this.validateCurrentChapter();
         this.$forceUpdate();
       }
+      if (question.type === 'rating') {
+        if (event.value === 1 && !this.excludedHeadlines.includes(question.question)) {
+          this.excludedHeadlines.push(question.question);
+        } else if (event.value !== 1 && this.excludedHeadlines.includes(question.question)) {
+          this.excludedHeadlines = this.excludedHeadlines.filter(headline => headline !== question.question);
+        }
+      }
     },
+
+    filterQuestionsByRating() {
+      if (this.chapter > 1) {
+        this.survey.chapters[this.chapter - 1].questions.forEach(question => {
+          if (question.type === 'rating') {
+            question.items = question.items.filter(item => !this.excludedHeadlines.includes(item.question));
+          }
+        });
+      }
+    },
+
 
     showNestedQuestion(nestedQuestion, question) {
       return nestedQuestion.parentValue.split(',').find(e => e === question.value || (typeof question.value === 'object' && question.value.some(val => val.value === e || val === e)));
@@ -407,15 +428,32 @@ export default {
     },
 
     onNextButtonClick() {
+      this.resetExcludedHeadlines();
       this.validateCurrentChapter();
 
       if (this.validation.hasChapter(this.chapter)
-        && !this.validation.getChapter(this.chapter).isValid) {
+&& !this.validation.getChapter(this.chapter).isValid) {
         this.$forceUpdate();
-
         return;
       }
 
+      // Überprüfen und speichern der Überschriften von Fragen mit der Bewertung "1"
+      this.currentChapter.questions.forEach(question => {
+        if (question.type === 'rating' && question.value === 1) {
+          this.excludedHeadlines.push(question.question);
+        }
+      });
+
+      // Fragen basierend auf den Bewertungen filtern
+      this.filterQuestionsByRating();
+
+      // Antworten des aktuellen Kapitels im Vuex-Store speichern
+      this.$store.commit('UPDATE_SURVEY_ANSWERS', {
+        chapterId: this.chapter,
+        answers: this.currentChapter.questions.map(q => q.value),
+      });
+
+      // Fortfahren zum nächsten Kapitel oder Abschluss des Fragebogens
       if (this.isLastChapter) {
         const params = {
           user_id: String(this.userId),
@@ -435,6 +473,8 @@ export default {
 
       this.chapter = this.chapter + 1;
     },
+
+
   },
 };
 
