@@ -223,10 +223,9 @@
                 class="flex-wrap hidden w-full mx-auto mt-3 mb-8 desktop:flex desktop:flex-row"
               >
                 <div
-                  v-for="category in trainingCategoriesForFilter"
-                  :id="category.id"
+                  v-for="category in trainingfcategoryForFilter"
                   :key="category.id"
-                  class="items-center mr-3 cursor-pointer filterPro"
+                  class="items-center mr-3 cursor-pointer"
                   @click="setFilterCategory(category.id)"
                 >
                   <div
@@ -508,7 +507,7 @@ import {
   TRAININGS_UPDATE_CURRENT_TRAINING,
   TAXONOMIES_FETCH_TRAINING_CATEGORIES,
   FILTER_TRAININGS,
-  FILTER_CATEGORY,
+  FILTER_CATEGORY_TRAININGS,
   CLICK,
   CLICK_CATEGORY,
   SETCATEGORY,
@@ -570,6 +569,22 @@ export default {
         .filter(id => id !== this.categoryCategory.id && id !== this.productCategory);
       return this.trainingCategories.filter(category => availableCategoryIds.includes(category.id));
     },
+    trainingfcategoryForFilter() {
+      console.log('allfcategoryCategoryTrainingSeries:', this.allfcategoryCategoryTrainingSeries);
+
+      // Überprüfen, ob allfcategoryCategoryTrainingSeries definiert ist
+      if (!this.allfcategoryCategoryTrainingSeries) {
+        console.error('allfcategoryCategoryTrainingSeries is undefined');
+        return [];
+      }
+
+      // there must be trainings of this category available
+      const availableCategoryIds = this.allfcategoryCategoryTrainingSeries
+        .reduce((availableCategories, series) => [...availableCategories, ...series.categories], [])
+        .filter(id => id !== this.fcategoryCategory.id && id !== this.categoryCategory.id && id !== this.productCategory);
+      return this.trainingCategories.filter(category => availableCategoryIds.includes(category.id));
+    },
+
     allProductTrainingSeries() {
       return this.trainingSeries.filter(
         item => item.trainings.length > 0
@@ -658,6 +673,19 @@ export default {
         )
         .sort((a, b) => this.sortTrainings(a, b));
     },
+
+    filteredCategoryTrainingSeries() {
+      // Zugriff auf die categoryCategoriesIds aus dem Vuex Store
+      const { categoryCategoriesIds } = this.$store.getters;
+      console.log('categoryCategoriesIds', categoryCategoriesIds);
+
+      // Filtern der Trainings basierend auf categoryCategoriesIds
+      const filteredTrainings = this.trainingSeries.filter(training => categoryCategoriesIds.includes(training.categoryId));
+      console.log('filteredTrainings', filteredTrainings);
+
+      return filteredTrainings;
+    },
+
     trainingSeries() {
       return this.$store.state.trainings.trainingSeries;
     },
@@ -728,7 +756,7 @@ export default {
       TRAININGS_UPDATE_CURRENT_TRAINING,
       TAXONOMIES_FETCH_TRAINING_CATEGORIES,
       FILTER_TRAININGS,
-      FILTER_CATEGORY,
+      FILTER_CATEGORY_TRAININGS,
       CLICK,
       CLICK_CATEGORY,
       SETCATEGORY,
@@ -746,9 +774,6 @@ export default {
       if (mm < 10) mm = `0${mm}`;
 
       const formattedToday = `${yyyy}-${mm}-${dd}`;
-      console.log(expires_at);
-      console.log(formattedToday);
-      console.log('------------');
       return expires_at >= formattedToday || expires_at == '';
     },
     handleCategoryClick() {
@@ -756,7 +781,7 @@ export default {
     },
     setFilterCategory(categoriesId) {
       console.log('setFilterCategory called with ID:', categoriesId);
-      this[FILTER_CATEGORY](categoriesId);
+      this[FILTER_CATEGORY_TRAININGS](categoriesId);
     },
     setFilterProduct(categoriesId) {
       console.log('setFilterProduct called with ID:', categoriesId);
