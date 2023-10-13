@@ -1,5 +1,8 @@
 <template>
-  <div class="survey-rating-question">
+  <div
+    v-if="shouldDisplayQuestion"
+    class="survey-rating-question"
+  >
     <div class="text-center survey-rating-question__headlines">
       <h4
         class="text-3xl text-gray-900"
@@ -51,9 +54,7 @@
     </div>
   </div>
 </template>
-
 <script>
-
 import SurveyOptionalHint from '@/components/survey/SurveyOptionalHint.vue';
 
 export default {
@@ -87,6 +88,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    dynamic_filter: {
+      type: Boolean,
+      default: false,
+    },
+    currentChapter: {
+      type: Number,
+      default: 1,
+    },
   },
 
   data() {
@@ -95,14 +104,52 @@ export default {
       hoveredOption: '',
     };
   },
+
+  computed: {
+    shouldDisplayQuestion() {
+    // Wenn dynamic_filter nicht aktiviert ist, oder wir uns im ersten Kapitel befinden, geben Sie true zurück.
+      if (!this.dynamic_filter || this.currentChapter === 1) {
+        return true;
+      }
+
+      // Zugriff auf den gespeicherten Umfragezustand im Vuex Store
+      const surveyState = this.$store.state.surveys;
+
+      // Überprüfen Sie, ob surveyState.surveys existiert und ein Array ist
+      if (surveyState && Array.isArray(surveyState.surveys)) {
+        let answeredWithRating1 = false;
+        surveyState.surveys.forEach(survey => {
+          survey.chapters.forEach((chapter, chapterIndex) => {
+          // Nur Antworten aus vorherigen Kapiteln berücksichtigen
+            if (chapterIndex < this.currentChapter - 1) {
+              const previousAnswer = chapter.questions.find(q => q.question === this.question && q.dynamic_filter);
+              if (previousAnswer && previousAnswer.value === '1') {
+                answeredWithRating1 = true;
+              }
+            }
+          });
+        });
+
+        // Wenn die Frage mit "1" beantwortet wurde, geben Sie false zurück, um sie auszublenden
+        if (answeredWithRating1) {
+          return false;
+        }
+      }
+
+      // Standardmäßig wird die Frage angezeigt
+      return true;
+    },
+  },
+
+
   methods: {
     onHover(index) {
       this.hoveredOption = index;
     },
   },
 };
-
 </script>
+
 
 <style lang="scss" scoped>
 
