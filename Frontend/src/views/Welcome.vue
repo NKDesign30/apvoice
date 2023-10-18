@@ -218,6 +218,7 @@
                 :per-page="1.5"
                 :pagination-enabled="false"
                 class="px-5"
+                style="flex-basis: 310px !important;"
               >
                 <slide
                   v-for="training in categoryTrainingSeries"
@@ -226,7 +227,8 @@
                   <router-link
                     v-if="training.trainings.length > 0"
                     :to="getTrainingLink(training)"
-                    class="flex flex-col w-full px-5 mb-5 tablet:w-1/4 tablet:mr-4 tablet:mb-0"
+                    class="flex flex-col w-full px-5 mb-5 tablet:w-3/4 tablet:mr-4 tablet:mb-0"
+                    style="width: 330px;"
                   >
                     <div
                       class="relative px-1 py-2 mb-2 bg-gray-600 rounded-lg tablet:px-10"
@@ -309,6 +311,7 @@
                 :per-page="1.5"
                 :pagination-enabled="false"
                 class="px-5"
+                style="flex-basis: 310px !important;"
               >
                 <slide
                   v-for="training in productTrainingSeries"
@@ -912,5 +915,14 @@ export default {
 header .container .justify-end {
   padding-left: 0;
 }
+
+@media screen and (max-width:500px) {
+  .carousel .VueCarousel-slide {
+  flex-basis: 320px !important;
+}
+
+
+}
+
 
 </style>
