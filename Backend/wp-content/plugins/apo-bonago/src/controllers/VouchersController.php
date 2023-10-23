@@ -27,18 +27,18 @@ class VouchersController extends Controller
      */
     const POINTS_TO_REDEEM = 50;
 
-	public function __construct() 
-	{
+    public function __construct()
+    {
         parent::__construct();
         $this->expertPoints = new ExpertPoint();
         $this->voucher = new Voucher();
         $this->voucherUser = new VoucherUser();
-	}
+    }
 
     /**
      * Assign a voucher to the current user
      */
-    public function assign( Request $request )
+    public function assign(Request $request)
     {
         $verifier = new ExpertPointsVerifier();
 
@@ -49,13 +49,13 @@ class VouchersController extends Controller
 
         $verifiedData = $verifier->verify($payload);
 
-        if( is_wp_error($verifiedData)) {
+        if (is_wp_error($verifiedData)) {
             return $verifiedData;
-        } 
+        }
 
         $assignedVoucher = $this->assignToUser();
 
-        if( is_wp_error( $assignedVoucher ) ) {
+        if (is_wp_error($assignedVoucher)) {
             return $assignedVoucher;
         }
 
@@ -67,42 +67,42 @@ class VouchersController extends Controller
     /**
      * The current user redeem a voucher
      */
-    public function redeem( Request $request )
+    public function redeem(Request $request)
     {
         $voucherCode = $request->get_param('voucher_code');
 
         $voucher = $this->voucher->showUsersVoucher($voucherCode);
 
-        if ( is_null( $voucher ) ) {
+        if (is_null($voucher)) {
             return $this->noVoucherAvailable();
         }
 
-        if ( $voucher->redeemed == 1 ) {
+        if ($voucher->redeemed == 1) {
             return $this->voucherAlreadyRedeemed();
         }
 
-        $redeemedVoucher = $this->voucher->redeem( $voucher->id );
-        $redeemedVoucher->bonago_url = get_option( 'apo_bonago_vouchers_url' ) . $redeemedVoucher->voucher_code;
+        $redeemedVoucher = $this->voucher->redeem($voucher->id);
+        $redeemedVoucher->bonago_url = get_option('apo_bonago_vouchers_url') . $redeemedVoucher->voucher_code;
 
-        return $this->prepareResponse( $redeemedVoucher );
+        return $this->prepareResponse($redeemedVoucher);
     }
 
     /**
      * Get all assigned voucher codes for the current user
      */
-    public function user( Request $request )
+    public function user(Request $request)
     {
-        $vouchers = array_map( function($voucher) {
-            $voucher->expires_at = date_i18n( get_option( 'date_format' ), strtotime(  $voucher->expires_at ) );
+        $vouchers = array_map(function ($voucher) {
+            $voucher->expires_at = date_i18n(get_option('date_format'), strtotime($voucher->expires_at));
             return $voucher;
         },  $this->voucher->showUsersVouchers());
 
-        return $this->prepareResponse( $vouchers );
+        return $this->prepareResponse($vouchers);
     }
 
     protected function associate($voucher)
     {
-        if( property_exists($voucher, 'id') ) {
+        if (property_exists($voucher, 'id')) {
             $voucherRequest = new Request();
             $voucherRequest->set_param('points_earned', self::POINTS_TO_REDEEM);
             $voucherRequest->set_param('related_type', self::REDEEM_TYPE);
@@ -114,32 +114,32 @@ class VouchersController extends Controller
     private function assignToUser()
     {
         $isCapped = $this->checkVoucherCapping();
-        if(is_wp_error($isCapped)){
+        if (is_wp_error($isCapped)) {
             return $isCapped;
         }
 
         $availableVoucher = $this->voucher->showOneAvailable();
 
-        if ( is_null( $availableVoucher ) ) {
+        if (is_null($availableVoucher)) {
             return $this->noVoucherAvailable();
         }
 
-        $this->voucherUser->create( ['voucher_code_id' => $availableVoucher->id, 'user_id' => $this->userId() ] );
-        return $this->voucher->assign( $availableVoucher->id );
+        $this->voucherUser->create(['voucher_code_id' => $availableVoucher->id, 'user_id' => $this->userId()]);
+        return $this->voucher->assign($availableVoucher->id);
     }
 
     private function checkVoucherCapping()
     {
         global $wpdb;
-        $return = Array(
+        $return = array(
             "is_available" => true,
             "message" => ""
         );
 
         $user = wp_get_current_user();
-        $maximal_points = get_option( 'apo_max_expertpoints', 0 );
-        $month = get_option( 'apo_capping_month', 1 );
-        $day = get_option( 'apo_capping_day', 1 );
+        $maximal_points = get_option('apo_max_expertpoints', 0);
+        $month = get_option('apo_capping_month', 1);
+        $day = get_option('apo_capping_day', 1);
 
         $timestamp = mktime(0, 0, 0, $month, $day);
         if ($timestamp > time()) {
@@ -151,59 +151,67 @@ class VouchersController extends Controller
                                 FROM
                                     {$wpdb->prefix}expert_points AS ep
                                 WHERE
-                                    user_id = {$user->ID} AND points_earned < 0 AND created_at >= '".date('Y-m-d H:i:s', $timestamp)."'");
+                                    user_id = {$user->ID} AND points_earned < 0 AND created_at >= '" . date('Y-m-d H:i:s', $timestamp) . "'");
 
-        $dateDiff = date_diff(new DateTime("now"), new DateTime(date('Y-m-d H:i:s', $timestamp)));
-
-        if($dateDiff->m >= 9){
-            if(abs($points->total_points) > ($maximal_points) - 50){
+        // Wenn der aktuelle Präfix "wp_" (für ES) ist, entfernen Sie das quartalsweise Capping
+        if (preg_match('/^wp_$/i', $wpdb->prefix)) {
+            if (abs($points->total_points) >= $maximal_points) {
                 $return['is_available'] = false;
                 $return['message'] = sprintf(__("Sorry, you already redeem the amount of expert points available per year. Please try again after [%s].", 'rxts'), date('d.m.Y', strtotime('+ 12 months', $timestamp)));
             }
-        }elseif($dateDiff->m >= 6){
-            if(abs($points->total_points) > ($maximal_points * 0.75) - 50){
-                $return['is_available'] = false;
-                $return['message'] = sprintf(__("Sorry, you already redeem the amount of expert points available per year. Please try again after [%s].", 'rxts'),  date('d.m.Y', strtotime('+ 9 months', $timestamp)));
-            }
-        }elseif($dateDiff->m >= 3){
-            if(abs($points->total_points) > ($maximal_points * 0.5) - 50){
-                $return['is_available'] = false;
-                $return['message'] = sprintf(__("Sorry, you already redeem the amount of expert points available per year. Please try again after [%s].", 'rxts'), date('d.m.Y', strtotime('+ 6 months', $timestamp)));
-            }
-        }else{
-            if(abs($points->total_points) > ($maximal_points * 0.25) - 50){
-                $return['is_available'] = false;
-                $return['message'] = sprintf(__("Sorry, you already redeem the amount of expert points available per year. Please try again after [%s].", 'rxts'), date('d.m.Y', strtotime('+ 3 months', $timestamp)));
+        } else {
+            // Für andere Länder behalten Sie das quartalsweise Capping bei
+            $dateDiff = date_diff(new DateTime("now"), new DateTime(date('Y-m-d H:i:s', $timestamp)));
+
+            if ($dateDiff->m >= 9) {
+                if (abs($points->total_points) > ($maximal_points) - 50) {
+                    $return['is_available'] = false;
+                    $return['message'] = sprintf(__("Sorry, you already redeem the amount of expert points available per year. Please try again after [%s].", 'rxts'), date('d.m.Y', strtotime('+ 12 months', $timestamp)));
+                }
+            } elseif ($dateDiff->m >= 6) {
+                if (abs($points->total_points) > ($maximal_points * 0.75) - 50) {
+                    $return['is_available'] = false;
+                    $return['message'] = sprintf(__("Sorry, you already redeem the amount of expert points available per year. Please try again after [%s].", 'rxts'),  date('d.m.Y', strtotime('+ 9 months', $timestamp)));
+                }
+            } elseif ($dateDiff->m >= 3) {
+                if (abs($points->total_points) > ($maximal_points * 0.5) - 50) {
+                    $return['is_available'] = false;
+                    $return['message'] = sprintf(__("Sorry, you already redeem the amount of expert points available per year. Please try again after [%s].", 'rxts'), date('d.m.Y', strtotime('+ 6 months', $timestamp)));
+                }
+            } else {
+                if (abs($points->total_points) > ($maximal_points * 0.25) - 50) {
+                    $return['is_available'] = false;
+                    $return['message'] = sprintf(__("Sorry, you already redeem the amount of expert points available per year. Please try again after [%s].", 'rxts'), date('d.m.Y', strtotime('+ 3 months', $timestamp)));
+                }
             }
         }
 
-        if(!$return['is_available']){
-            return new WP_Error( 
-                "exceeded_voucher_capping", 
-                $return['message'], 
-                array( "status" => 404 ) 
+        if (!$return['is_available']) {
+            return new WP_Error(
+                "exceeded_voucher_capping",
+                $return['message'],
+                array("status" => 404)
             );
-        }else{
+        } else {
             return null;
         }
     }
 
     private function noVoucherAvailable()
     {
-        return new WP_Error( 
-            "no_voucher_available", 
-            "Oops, that didn't work out. Please contact us.", 
-            array( "status" => 404 ) 
+        return new WP_Error(
+            "no_voucher_available",
+            "Oops, that didn't work out. Please contact us.",
+            array("status" => 404)
         );
     }
 
     private function voucherAlreadyRedeemed()
     {
-        return new WP_Error( 
-            "voucher_already_redeemed", 
-            "The voucher is already redeemed by you", 
-            array( "status" => 403 ) 
+        return new WP_Error(
+            "voucher_already_redeemed",
+            "The voucher is already redeemed by you",
+            array("status" => 403)
         );
     }
-
-} 
+}
