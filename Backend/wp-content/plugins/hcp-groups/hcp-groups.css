@@ -1,0 +1,16 @@
+/* Beispiel-Stilregeln für die Tabelle */
+.wp-list-table {
+  width: 100%;
+}
+
+/* Beispiel-Stilregeln für Tabellenzellen */
+.wp-list-table td {
+  padding: 10px;
+}
+
+/* Beispiel-Stilregeln für Schaltflächen */
+.button-primary {
+  background-color: #0073e6;
+  color: #fff;
+  border: none;
+}
