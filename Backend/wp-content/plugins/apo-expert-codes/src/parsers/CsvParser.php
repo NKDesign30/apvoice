@@ -14,19 +14,19 @@ class CsvParser extends AbstractExpertCodeDocumentParser
     public function parse()
     {
         $result = [];
-        $fp = fopen( $this->filepath, 'r' );
+        $fp = fopen($this->filepath, 'r');
 
-        while ( ( $row = fgetcsv( $fp, 0, ';' ) ) !== false ) {
-            if ( $this->validateRow( $row ) ) {
-                $result[] = [
-                    'expert_code' => $row[0],
-                    'email' => $row[1],
-                    'usages' => empty( $row[2] ) ? null : (int) $row[2],
-                ];
-            }
+        while (($row = fgetcsv($fp, 0, ',')) !== false) {
+            // if ( $this->validateRow( $row ) ) {
+            $result[] = [
+                'expert_code' => $row[0],
+                'email' => $row[1],
+                'usages' => empty($row[2]) ? null : (int) $row[2],
+            ];
+            //}
         }
 
-        fclose( $fp );
+        fclose($fp);
 
         return $result;
     }
@@ -39,22 +39,22 @@ class CsvParser extends AbstractExpertCodeDocumentParser
      */
     protected function determineDelimiter()
     {
-        $possibleDelimiters = [',', ';', '|'];
+        $possibleDelimiters = [','];
 
-        if ( ($fp = fopen( $this->filepath, 'r' )) !== false ) {
+        if (($fp = fopen($this->filepath, 'r')) !== false) {
             // Try all delimiters and return the first returning a solid result
-            foreach ( $possibleDelimiters as $delimiter ) {
-                $firstRow = fgetcsv( $fp, 0, $delimiter );
+            foreach ($possibleDelimiters as $delimiter) {
+                $firstRow = fgetcsv($fp, 0, $delimiter);
 
                 // If the result returned for that delimiter contains more than one single row, that must be it then
-                if ( count( $firstRow ) > 1 ) {
-                    fclose( $fp );
+                if (count($firstRow) > 1) {
+                    fclose($fp);
 
                     return $delimiter;
                 }
             }
 
-            fclose( $fp );
+            fclose($fp);
         }
 
         return ',';
